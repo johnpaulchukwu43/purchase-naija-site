@@ -4,7 +4,12 @@ import Slider from 'react-slick';
 
 import '../common/index.scss';
 import LatestCollection from "./latest-collections/index";
-import {FASHION_PRODUCT, MANUFACTURING_PRODUCT, RAW_MATERIALS_PRODUCT} from "../../constants/ActionTypes";
+import {
+    BEAUTY_PRODUCT, ELECTRONICS_PRODUCT,
+    FASHION_PRODUCT,
+    MANUFACTURING_PRODUCT,
+    RAW_MATERIALS_PRODUCT
+} from "../../constants/ActionTypes";
 import LatestProductItem from "./latest-collections/latest-product-item";
 
 const Content = props => {
@@ -317,6 +322,8 @@ const Content = props => {
 
         {/*Latest Collection*/}
         <LatestCollection categoryName = {FASHION_PRODUCT} categoryNameFriendly="Fashion"/>
+        <LatestCollection categoryName = {ELECTRONICS_PRODUCT} categoryNameFriendly="Electronics"/>
+        <LatestCollection categoryName = {BEAUTY_PRODUCT} categoryNameFriendly="Beauty"/>
         <LatestCollection categoryName = {RAW_MATERIALS_PRODUCT} categoryNameFriendly="RAW MATERIALS"/>
         {/*Latest Collection End*/}
 
