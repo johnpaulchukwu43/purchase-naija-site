@@ -23,6 +23,7 @@
     "dotenv-expand": "4.2.0",
     "eslint": "5.6.0",
     "file-loader": "2.0.0",
+    "fork-ts-checker-webpack-plugin-alt": "^0.4.14",
     "fs-extra": "^8.0.1",
     "html-webpack-plugin": "^4.0.0-beta.5",
     "isemail": "^3.2.0",
