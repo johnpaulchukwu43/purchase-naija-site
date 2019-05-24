@@ -86,10 +86,10 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "start": "run-p build serve",
+    "start": "run-p build",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "serve": "nodemon server.js"
+    "postbuild":"nodemon server.js",
+    "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": "react-app"
