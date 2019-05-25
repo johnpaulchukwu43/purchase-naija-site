@@ -86,7 +86,6 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "start": "run-p build",
     "build": "node scripts/build.js",
     "postbuild":"node server.js",
     "test": "node scripts/test.js"
