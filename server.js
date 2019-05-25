@@ -8,7 +8,7 @@ app.use(express.static(__dirname + directory));
 
 var apiForwardingUrl = secret.proxyToApi || 'http://localhost:5000';
 
-console.log(secret.port);
+console.log('PORT NUMBER PICKED FROM process.env.PORT: '+secret.port);
 var proxyOptions = {
     changeOrigin: true
 };
@@ -32,7 +32,7 @@ app.get('/*', function(req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-var port = process.env.PORT || 3000;
+var port = secret.port || 3000;
 app.listen(port, () =>{
     console.log('Listening on', port);
     console.log('Forwarding API requests to', apiForwardingUrl);
