@@ -1,12 +1,11 @@
 /*
  Created by Johnpaul Chukwu @ $
 */
-import React, {Component} from 'react';
-import {FASHION_PRODUCT} from "../../../constants/ActionTypes";
-import SortBar from "../../categories/common/sort-bar";
-import ProductListing from "../../categories/common/product-listing";
-import Breadcrumb from "../../common/breadcrumb";
-
+import React, {Component,lazy, Suspense} from 'react';
+import PropTypes from "prop-types";
+import connect from "react-redux/es/connect/connect";
+import {searchAllProducts, searchAllProductsFailed, searchAllProductsSuccess} from "../../../actions/productActions";
+import  SearchResult from "./searchResult";
 
 class SearchResultContainer extends Component{
 
@@ -15,61 +14,52 @@ class SearchResultContainer extends Component{
         super(props);
     }
 
+    componentDidMount(){
+        this.fetchProducts();
+    }
+
+    fetchProducts = () => {
+        let {searchAllProducts,searchAllProductsSuccess,searchAllProductsFailed} = this.props;
+        let {searchTerm} = this.props.location.state;
+        console.log(searchTerm);
+        searchAllProducts(searchTerm).then(result=>{
+            if(result.client_error_message){
+                let error = {actual:result.response.data,friendly:result.client_error_message};
+                searchAllProductsFailed(error);
+            }else{
+                searchAllProductsSuccess(result.data.result || []);
+            }
+        })
+    };
+
+    componentDidUpdate(prevProps) {
+        let {searchTerm} = this.props.location.state;
+        //if there has been a change in the searchTerm, lets fetch products again
+        console.log("Previous Props: "+prevProps.location.state.searchTerm);
+        console.log("New Props: "+searchTerm);
+        if(searchTerm !== prevProps.location.state.searchTerm){
+            console.log("not equal, fetching...");
+            this.fetchProducts();
+        }
+    }
+
     render(){
-
+        let {searchTerm} = this.props.location.state;
+        let {searchInfo} = this.props;
         return(
-            <div>
-                <Breadcrumb title={'Search Results -'+'Name'}/>
-
-
-                {/*Search section*/}
-                <section className="section-b-space">
-                    <div className="collection-wrapper">
-                        <div className="container">
-                            <div className="row">
-                                <div className="collection-content col">
-                                    <div className="page-main-content ">
-                                        <div className="">
-                                            <div className="row">
-                                                <div className="col-sm-12">
-                                                    <div className="collection-product-wrapper">
-                                                        <div className="product-top-filter">
-                                                            <div className="container-fluid p-0">
-                                                                <div className="row">
-                                                                    <div className="col-xl-12">
-                                                                        <div className="filter-main-btn">
-                                                                            <span onClick={this.openFilter}
-                                                                                  className="filter-btn btn btn-theme"><i
-                                                                                className="fa fa-filter"
-                                                                                aria-hidden="true"></i> Filter</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row">
-                                                                    <div className="col-12">
-                                                                        <SortBar categoryName = {FASHION_PRODUCT} />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        {/*Products Listing Component*/}
-                                                        <ProductListing categoryName = {FASHION_PRODUCT}/>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
+               <SearchResult searchTerm = {searchTerm} searchInfo={searchInfo}/>
         )
     }
 }
 
-export default SearchResultContainer;
+const mapStateToProps = (state) => ({
+    searchInfo: state.searchResults
+});
+
+SearchResultContainer.propTypes = {
+    searchAllProducts: PropTypes.func.isRequired,
+    searchAllProductsSuccess: PropTypes.func.isRequired,
+    searchAllProductsFailed: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps,{searchAllProducts,searchAllProductsFailed,searchAllProductsSuccess})(SearchResultContainer);

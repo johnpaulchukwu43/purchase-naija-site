@@ -1,13 +1,13 @@
 
 // Get Unique Brands from Json Data
 import {
-    BEAUTY_PRODUCT,
-    COMPUTER_PRODUCT,
+    BEAUTY_PRODUCT, beautyCollection,
+    COMPUTER_PRODUCT, computerCollection, electronicCollections,
     ELECTRONICS_PRODUCT,
-    FASHION_PRODUCT,
-    MANUFACTURING_PRODUCT,
-    PHONE_PRODUCT,
-    RAW_MATERIALS_PRODUCT
+    FASHION_PRODUCT, fashionCollection,
+    MANUFACTURING_PRODUCT, manufacturingCollection,
+    PHONE_PRODUCT, phoneCollection,
+    RAW_MATERIALS_PRODUCT, rawMaterialCollection
 } from "../constants/ActionTypes";
 import {
     BEAUTY_SINGLE_PRODUCT_ROUTE,
@@ -198,6 +198,28 @@ export const determineRouteForSingleProductView = (categoryName)=>{
             return COMPUTER_SINGLE_PRODUCT_ROUTE;
         case BEAUTY_PRODUCT:
             return BEAUTY_SINGLE_PRODUCT_ROUTE;
+        default:
+            break;
+    }
+};
+
+
+export const determineCategoryFromProductFromApiResult = (categoryName)=>{
+    switch(categoryName){
+        case fashionCollection:
+            return FASHION_PRODUCT;
+        case rawMaterialCollection:
+            return RAW_MATERIALS_PRODUCT;
+        case electronicCollections:
+            return ELECTRONICS_PRODUCT;
+        case phoneCollection:
+            return PHONE_PRODUCT;
+        case manufacturingCollection:
+            return MANUFACTURING_PRODUCT;
+        case computerCollection:
+            return MANUFACTURING_PRODUCT;
+        case beautyCollection:
+            return BEAUTY_PRODUCT;
         default:
             break;
     }

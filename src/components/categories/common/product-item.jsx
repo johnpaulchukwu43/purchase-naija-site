@@ -17,7 +17,7 @@ class ProductItem extends Component {
             quantity: 1,
             image: '',
             categoryName:props.categoryName,
-            routeForSingleProductView:''
+            routeForSingleProductView:'here'
         }
     }
 
