@@ -102,7 +102,16 @@ export const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 export const CHECKOUT_BEGIN = 'CHECKOUT_BEGIN';
 export const CHECKOUT_REQUEST = 'CHECKOUT_REQUEST'
 export const CHECKOUT_SUCCESS = 'CHECKOUT_SUCCESS'
-export const CHECKOUT_FAILURE = 'CHECKOUT_FAILURE'
+export const CHECKOUT_FAILURE = 'CHECKOUT_FAILURE';
+
+//category names as defined on backend
+export const fashionCollection = 'fashions';
+export const rawMaterialCollection = 'rawmaterials';
+export const phoneCollection = 'phones';
+export const electronicCollections = 'electronics';
+export const manufacturingCollection = 'manufacturing';
+export const beautyCollection = 'beauties';
+export const computerCollection = 'computers';
 
 //!! warning do not change these names, they re used in reducers, views to identify categories !!
 export const FASHION_PRODUCT = "fashionProducts";

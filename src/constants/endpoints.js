@@ -6,7 +6,7 @@ export const REGISTER_SERVICE_PR0_ENDPOINT =`${BASE_PATH}/serviceProvider/signup
 export const GET_GUEST_TOKEN_ENDPOINT =`${BASE_PATH}/guest/getToken` ;
 
 export const searchAllProductsEndpoint =(searchTerm)=>{
-    return `${BASE_PATH}/product/search/${searchTerm}`
+    return `${BASE_PATH}/product/search/?searchTerm=${searchTerm}`
 };
 
 export const updateUserInfoEndpoint = (userId)=>{

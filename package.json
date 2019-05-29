@@ -87,7 +87,7 @@
   "scripts": {
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "postbuild":"node server.js",
+    "postbuild": "node server.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
@@ -159,5 +159,6 @@
     "sass-loader": "^7.1.0",
     "serve": "^11.0.0",
     "webpack": "^4.19.1"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

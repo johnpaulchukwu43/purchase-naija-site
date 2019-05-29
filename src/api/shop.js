@@ -144,6 +144,7 @@ const getAllProductsPaginated = (pageNumber,pageSize,cb= () => {})=>{
         });
 };
 
+
 const searchAllProducts = (searchTerm)=>{
     return new Promise((resolve,reject)=>{
         let endpoint = searchAllProductsEndpoint(searchTerm);

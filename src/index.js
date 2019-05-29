@@ -50,7 +50,7 @@ import Faq from './components/pages/faq'
 import {
     BEAUTY_SINGLE_PRODUCT_ROUTE, COMPUTER_SINGLE_PRODUCT_ROUTE, ELECTRONICS_SINGLE_PRODUCT_ROUTE,
     FASHION_SINGLE_PRODUCT_ROUTE,
-    MANUFACTURING_SINGLE_PRODUCT_ROUTE, PHONE_SINGLE_PRODUCT_ROUTE, RAW_MATERIAL_SINGLE_PRODUCT_ROUTE,
+    MANUFACTURING_SINGLE_PRODUCT_ROUTE, PHONE_SINGLE_PRODUCT_ROUTE, RAW_MATERIAL_SINGLE_PRODUCT_ROUTE, SEARCH_ROUTE,
     USER_DASHBOARD_ROUTE,
     USER_LOGIN_ROUTE
 } from "./constants/app-routes";
@@ -168,7 +168,7 @@ class Root extends React.Component {
                                 <Route path={`${process.env.PUBLIC_URL}/pages/user/register`} component={Register}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/register`} component={RegisterServiceProvider}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/login`} component={LoginServiceProvider}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/search`} component={SearchResultContainer}/>
+                                <Route path={`${process.env.PUBLIC_URL}${SEARCH_ROUTE}`} component={SearchResultContainer}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/forget-password`} component={ForgetPassword}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/contact`} component={Contact}/>
                                 <Route path={`${process.env.PUBLIC_URL}${USER_DASHBOARD_ROUTE}`} component={protectedPage(Dashboard,Login,USER_LOGIN_ROUTE)}/>

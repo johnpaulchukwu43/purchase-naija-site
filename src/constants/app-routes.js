@@ -11,4 +11,5 @@ export const PHONE_SINGLE_PRODUCT_ROUTE = `${process.env.PUBLIC_URL}/category/ph
 export const COMPUTER_SINGLE_PRODUCT_ROUTE = `${process.env.PUBLIC_URL}/category/computers/product`;
 export const ELECTRONICS_SINGLE_PRODUCT_ROUTE = `${process.env.PUBLIC_URL}/category/electronics/product`;
 export const USER_LOGIN_ROUTE = "/pages/user/login";
+export const SEARCH_ROUTE = "/pages/search";
 export const USER_DASHBOARD_ROUTE = "/pages/user/dashboard";

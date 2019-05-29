@@ -1,10 +1,30 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import {SEARCH_ROUTE} from "../../../../constants/app-routes";
 class   Search extends Component {
 
     constructor (props) {
         super (props)
+        this.state = {
+            searchTerm:''
+        }
 
     }
+
+    setStateFromInput = (event) => {
+        var obj = {};
+        obj[event.target.name] = event.target.value;
+        this.setState(obj);
+
+    };
+
+    doSearch = ()=>{
+        let {searchTerm} = this.state;
+        this.context.router.history.push({
+            pathname:SEARCH_ROUTE,
+            state: {searchTerm}
+        });
+    };
 
     render (){
         const searchContainer ={
@@ -18,7 +38,10 @@ class   Search extends Component {
                     <div className="input-group">
 
                         <input type="text" className="form-control"
+                               name="searchTerm"
                                aria-label="Amount (to the nearest Naira)"
+                               value={this.state.searchTerm}
+                               onChange={this.setStateFromInput}
                                placeholder="Search For Products" />
                         <div className="input-group-btn">
                             {/*<button type="button" className="dropdown-toggle search-categories"*/}
@@ -31,9 +54,9 @@ class   Search extends Component {
                             {/*</ul>*/}
                         </div>
                         <div className="input-group-append">
-                            <button className="btn btn-solid">
+                            <a className="btn btn-solid" onClick={this.doSearch}>
                                 <i className="fa fa-lg fa-search"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -41,5 +64,9 @@ class   Search extends Component {
         )
     }
 }
+
+Search.contextTypes = {
+    router: PropTypes.object.isRequired
+};
 
 export default Search

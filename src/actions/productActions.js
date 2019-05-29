@@ -12,6 +12,10 @@ import {RAW_MATERIALS_PRODUCT} from "../constants/ActionTypes";
 import {ELECTRONICS_PRODUCT} from "../constants/ActionTypes";
 import {PHONE_PRODUCT} from "../constants/ActionTypes";
 import {BEAUTY_PRODUCT} from "../constants/ActionTypes";
+import Notify from "../utils/notification";
+
+const notify = new Notify();
+
 
 export const fetchProductsBegin = () => ({
     type: types.FETCH_PRODUCTS_BEGIN
@@ -21,12 +25,14 @@ export const searchAllProductsBegin = () => ({
     type: types.SEARCH_ALL_PRODUCTS_BEGIN
 });
 
-export const searchAllProductsFailed = () => ({
-    type: types.SEARCH_ALL_PRODUCTS_FAILED
+export const searchAllProductsFailed = (error) => ({
+    type: types.SEARCH_ALL_PRODUCTS_FAILED,
+    error
 });
 
-export const searchAllProductsSuccess = () => ({
-    type: types.SEARCH_ALL_PRODUCTS_SUCCESS
+export const searchAllProductsSuccess = (products) => ({
+    type: types.SEARCH_ALL_PRODUCTS_SUCCESS,
+    payload:products
 });
 
 export const fetchAllProductsBegin = () => ({
@@ -116,9 +122,7 @@ export const getAllProducts = (pageNumber, pageSize,) => dispatch => {
 
 export const searchAllProducts = (searchTerm) =>dispatch =>{
     dispatch(searchAllProductsBegin());
-    shop.searchAllProducts(searchTerm).then(result=>{
-        console.log(JSON.stringify(result));
-    })
+    return shop.searchAllProducts(searchTerm);
 };
 
 // export const getAllProducts = () => dispatch => {
@@ -134,6 +138,7 @@ export const fetchSingleProduct = productId => ({
 });
 
 const throwError = (dispatch,client_error_message,debug_message)=>{
+    notify.error(client_error_message);
     dispatch({
         type: FAILED_TO_FETCH_ERROR,
         payload: {error:client_error_message,debug_message:debug_message}
