@@ -86,7 +86,7 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "start":"run-s build-task serve-task"
+    "start":"run-s build-task serve-task",
     "build-task": "node scripts/build.js",
     "serve-task": "node server.js",
     "test": "node scripts/test.js"
