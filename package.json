@@ -86,9 +86,8 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "start":"run-s build-task serve-task",
-    "build-task": "node scripts/build.js",
-    "serve-task": "node server.js",
+    "build": "node scripts/build.js",
+    "start": "node server.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
