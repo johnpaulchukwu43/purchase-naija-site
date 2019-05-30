@@ -7,14 +7,12 @@ import LatestCollection from "./latest-collections/index";
 import {
     BEAUTY_PRODUCT, ELECTRONICS_PRODUCT,
     FASHION_PRODUCT,
-    MANUFACTURING_PRODUCT,
     RAW_MATERIALS_PRODUCT
 } from "../../constants/ActionTypes";
-import LatestProductItem from "./latest-collections/latest-product-item";
 
-const Content = props => {
+const Content = () => {
 
-    const sponsorImgStyle = {height: '20vh', marginTop: '10px', marginLeft: '30px'};
+    const sponsorImgStyle = {height: '20vh', marginTop: '10px', marginLeft: '25px'};
 
     const settings = {
         dots: true,
@@ -31,9 +29,16 @@ const Content = props => {
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 5,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 3000,
         responsive: [
+            {
+                breakpoint: 1400,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 4
+                }
+            },
             {
                 breakpoint: 1200,
                 settings: {
@@ -51,8 +56,8 @@ const Content = props => {
             {
                 breakpoint: 420,
                 settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
+                    slidesToShow: 2,
+                    slidesToScroll: 2
                 }
             }
         ]
@@ -152,7 +157,7 @@ const Content = props => {
                     <h2 className="title-inner1"> Product Categories</h2>
                 </div>
                 <div className="row gutter-10">
-                    <div className="col-sm-6 col-md-4">
+                    <div className="col-sm-6 col-md-4 product-category-wrapper">
                         <div className="flat-image-box style-1 data-effect div-h22 clearfix">
                             <div className="item data-effect-item">
                                 <div className="inner">
@@ -160,7 +165,7 @@ const Content = props => {
                                         <div id="carouselExampleSlidesOnly" className="carousel slide"
                                              data-ride="carousel">
                                             <div className="carousel-inner">
-                                                <div className="carousel-item active">
+                                                <div className="carousel-item active ">
                                                     <img className="d-block w-100"
                                                          src={`${process.env.PUBLIC_URL}/assets/images/categories/hp-gold.jpg`}
                                                     />
@@ -178,11 +183,7 @@ const Content = props => {
                                             </div>
                                             <div style={{position: 'absolute', top: '50%', left: '20%'}}>
                                                 <Link to={`${process.env.PUBLIC_URL}/product/category/raw_materials`}>
-                                                    <h4 style={{
-                                                        color: 'white',
-                                                        font: 'size 10px',
-                                                        fontWeight: 'bold'
-                                                    }}>RAW
+                                                    <h4 className="product-category-text">RAW
                                                         MATERIALS</h4>
                                                 </Link>
                                                 <i className="fa fa-angle-down fa-2x"
@@ -195,7 +196,7 @@ const Content = props => {
                         </div>
                     </div>
 
-                    <div className="col-sm-6 col-md-4">
+                    <div className="col-sm-6 col-md-4 product-category-wrapper">
                         <div className="flat-image-box style-1 row2 data-effect clearfix">
                             <div className="item data-effect-item">
                                 <div className="inner">
@@ -273,7 +274,7 @@ const Content = props => {
                         </div>
                     </div>
                     {/*col-md-4*/}
-                    <div className="col-sm-6 col-md-4">
+                    <div className="col-sm-12 col-md-4 product-category-wrapper">
                         <div className="flat-image-box style-1 data-effect div-h22 clearfix">
                             <div className="item data-effect-item">
                                 <div className="inner">
@@ -302,8 +303,8 @@ const Content = props => {
 
 
                                         <div style={{position: 'absolute', top: '50%', left: '35%'}}>
-                                            <Link to={`${process.env.PUBLIC_URL}/`}>
-                                                <h4 style={{color: "#fff", font: "size 10px"}}>SERVICE</h4>
+                                            <Link to={`${process.env.PUBLIC_URL}/product/category/electronics`}>
+                                                <h4 className="product-category-text">ELECTRONICS</h4>
                                             </Link>
 
                                             <i className="fa fa-angle-down fa-2x"
