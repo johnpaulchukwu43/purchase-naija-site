@@ -88,11 +88,11 @@ class HeaderOne extends Component {
                     <i className="fa fa-lg fa-user-circle" aria-hidden="true"></i>
                     <ul className="show-div setting">
                         <li>
-                            <h6><Link to={`${process.env.PUBLIC_URL}/pages/user/login`} data-lng="en">Login to Account</Link></h6>
+                            <h5><Link to={`${process.env.PUBLIC_URL}/pages/user/login`} data-lng="en" className="mobile-account-style">Login to Account</Link></h5>
                         </li>
                         <li className="divider h20"></li>
                         <li>
-                            <h6><Link to={`${process.env.PUBLIC_URL}/pages/user/register`} data-lng="en">Create New Account</Link></h6>
+                            <h5><Link to={`${process.env.PUBLIC_URL}/pages/user/register`} data-lng="en" className="mobile-account-style">Create Account</Link></h5>
                         </li>
                     </ul>
                 </div>
@@ -157,6 +157,7 @@ class HeaderOne extends Component {
                                         <div className="icon-nav">
                                             <ul>
                                                 {isAuthenticated ? userLinks : guestLinks}
+                                                {/*mobile-search*/}
                                                 <li className="onhover-div mobile-search">
                                                     <div><img
                                                         src={`${process.env.PUBLIC_URL}/assets/images/icon/search.png`}
@@ -190,6 +191,7 @@ class HeaderOne extends Component {
                                                     </div>
                                                 </li>
                                                 <CartContainer/>
+                                                {/*settings*/}
                                                 <li className="onhover-div mobile-setting">
                                                     <div><img
                                                         src={`${process.env.PUBLIC_URL}/assets/images/icon/setting.png`}

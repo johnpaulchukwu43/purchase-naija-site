@@ -29,7 +29,7 @@ const Content = () => {
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 5,
-        autoplay: false,
+        autoplay: true,
         autoplaySpeed: 3000,
         responsive: [
             {
