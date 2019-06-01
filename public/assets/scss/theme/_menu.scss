@@ -1508,6 +1508,12 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
   }
 }
 @media (max-width:577px) {
+  .mobile-account-style{
+    color: #333333 !important;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: capitalize;
+  }
   .sticky {
     &.fixed {
       .main-menu .menu-left .navbar {
@@ -1602,7 +1608,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
           font-size: 0;
           padding: 0;
           .show-div {
-            top: -58px;
+            top: -145px;
             left: 0;
             &.shopping-cart {
               top: unset;
@@ -1653,7 +1659,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
             font-size: 22px;
             color: $header-font;
           }
-          > div {
+          a {
             img {
               display: none;
             }
@@ -1683,7 +1689,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
             }
           }
         }
-        
+
 
       }
     }
