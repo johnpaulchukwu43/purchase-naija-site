@@ -18,9 +18,10 @@ class LatestComponent extends Component {
     render (){
         var settings = {
             infinite: true,
+            dots: false,
             speed: 300,
-            slidesToShow: 4,
-            slidesToScroll: 4,
+            slidesToShow: 5,
+            slidesToScroll: 5,
             autoplay: true,
             autoplaySpeed: 3000,
             responsive: [
@@ -36,13 +37,6 @@ class LatestComponent extends Component {
                     settings: {
                         slidesToShow:2,
                         slidesToScroll: 2
-                    }
-                },
-                {
-                    breakpoint: 420,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1
                     }
                 }
             ]
