@@ -67,9 +67,10 @@ class LatestProductItem extends Component {
         return (
                 <div className="product-box">
                     <div className="img-wrapper">
-                        <div className="lable-block">
-                            <span className="lable3">new</span>
-                        </div>
+                        {/*todo  if needed ?*/}
+                        {/*<div className="lable-block">*/}
+                            {/*<span className="lable3">new</span>*/}
+                        {/*</div>*/}
                         <div className="front">
                             <Link to={`${routeForSingleProductView}/${product._id}`} ><img
                                 src={`${this.state.image?this.state.image:product.imageUrls[0]}`}
@@ -100,7 +101,6 @@ class LatestProductItem extends Component {
                                 {/*</li>)*/}
                             {/*}*/}
                         {/*</ul>*/}
-
                     </div>
                     <div className="product-detail">
                         <div>
@@ -111,7 +111,6 @@ class LatestProductItem extends Component {
                             <Link to={`${routeForSingleProductView}/${product.id}`}>
                                 <h6>{product.name}</h6>
                             </Link>
-                            <p>{product.shortDetails}</p>
                             {/*todo add discount feature*/}
                             {/*<h4>{symbol}{(product.price*product.discount/100)}*/}
                             {/*<del><span className="money">{symbol}{product.price}</span></del></h4>*/}

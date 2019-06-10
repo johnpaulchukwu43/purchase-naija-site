@@ -139,6 +139,16 @@ class FooterOne extends Component {
     render () {
         let color_style = this.state.colorPick ? {right:'0px'}: {right:'-190px'};
         let tap_to_top = {display: 'none'}
+        let footerSubHeaderTextStyle={
+            color:"#558719",
+            marginBottom: 15
+        };
+        let footerLinkTextStyle={
+            fontSize:15
+        };
+        let footerSectionSpace ={
+            paddingBottom:30
+        };
         return (
             <footer className="footer-light">
                 {/*Subscribe section*/}
@@ -150,7 +160,7 @@ class FooterOne extends Component {
                                     <div className="subscribe">
                                         <div>
                                             <h4>KNOW IT ALL FIRST!</h4>
-                                            <p>Never Miss Anything From Us By Signing Up To Our Newsletter. </p>
+                                            <p >Never Miss Anything From Us By Signing Up To Our Newsletter. </p>
                                         </div>
                                     </div>
                                 </div>
@@ -168,19 +178,19 @@ class FooterOne extends Component {
                     </div>
                 </div>
                 {/*Main footer*/}
-                <section className="section-b-space dark-layout">
+                <section className="section-b-space dark-layout" style={footerSectionSpace}>
                     <div className="container">
                         <div className="row footer-theme partition-f">
                             <div className="col-lg-4 col-md-6">
                                 <div className="footer-title footer-mobile-title">
-                                    <h4>about</h4>
+                                    <h4 style={footerSubHeaderTextStyle}>about</h4>
                                 </div>
                                 <div className="footer-contant">
                                     <div className="footer-logo">
-                                        <Link to={`${process.env.PUBLIC_URL}/left-sidebar/collection`} ><img src={`${process.env.PUBLIC_URL}/assets/images/icon/pnlogo.png`}
+                                        <Link to={`${process.env.PUBLIC_URL}/`} ><img src={`${process.env.PUBLIC_URL}/assets/images/icon/pnlogo.png`}
                                         /></Link>
                                     </div>
-                                    <p>We are a brand focused on bringing <span>made in Nigeria</span> products to the Global
+                                    <p style={footerLinkTextStyle}>We are a brand focused on bringing <span>made in Nigeria</span> products to the Global
                                         community in
                                         style.</p>
                                     <div className="footer-social">
@@ -207,14 +217,14 @@ class FooterOne extends Component {
                             <div className="col offset-xl-1">
                                 <div className="sub-title">
                                     <div className="footer-title">
-                                        <h4>my account</h4>
+                                        <h4 style={footerSubHeaderTextStyle}>my account</h4>
                                     </div>
                                     <div className="footer-contant">
-                                        <ul>
-                                            <li><a href="#">Login/ Register</a></li>
-                                            <li><a href="#">Your Cart</a></li>
-                                            <li><a href="#">Wishlist items</a></li>
-                                            <li><a href="#">Your checkout</a></li>
+                                        <ul >
+                                            <li><a href="#" style={footerLinkTextStyle}>Login/ Register</a></li>
+                                            <li ><a href="#" style={footerLinkTextStyle}>Your Cart</a></li>
+                                            <li ><a href="#" style={footerLinkTextStyle}>Wishlist items</a></li>
+                                            <li style={footerLinkTextStyle}><a href="#">Your checkout</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -238,14 +248,14 @@ class FooterOne extends Component {
                             <div className="col">
                                 <div className="sub-title">
                                     <div className="footer-title">
-                                        <h4>store information</h4>
+                                        <h4 style={footerSubHeaderTextStyle}>store information</h4>
                                     </div>
                                     <div className="footer-contant">
                                         <ul className="contact-list">
-                                            <li><i className="fa fa-map-marker"></i>30 Muller Street, Lekki, Lagos, Nigeria.
+                                            <li style={footerLinkTextStyle}><i className="fa fa-map-marker"></i>30 Muller Street, Lekki, Lagos, Nigeria.
                                             </li>
-                                            <li><i className="fa fa-phone"></i>Call Us:+234 808 638 8339</li>
-                                            <li><i className="fa fa-envelope-o"></i>Email Us: <a
+                                            <li style={footerLinkTextStyle}><i className="fa fa-phone"></i>Call Us:+234 808 638 8339</li>
+                                            <li style={footerLinkTextStyle}><i className="fa fa-envelope-o"></i>Email Us: <a
                                                 href="#">info@purchasenaija.com.ng</a></li>
                                         </ul>
                                     </div>
@@ -255,7 +265,7 @@ class FooterOne extends Component {
                     </div>
                 </section>
                 {/*Copyright*/}
-                <div className="sub-footer ">
+                <div className="sub-footer">
                     <div className="container">
                         <div className="row">
                             <div className="col-xl-6 col-md-6 col-sm-12">

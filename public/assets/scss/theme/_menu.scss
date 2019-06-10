@@ -1550,7 +1550,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
     left:0;
     height: 60px;
     background-color: $font-color;
-    width: 100vw;
+    width: 100%;
     z-index: 9;
     box-shadow: 0 2px 5px 0 rgba(168,168,168,1);
   }

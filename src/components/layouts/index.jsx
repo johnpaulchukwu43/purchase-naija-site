@@ -83,7 +83,7 @@ const Content = () => {
             {/*/!*Home Section End*!/*/}
             {/*</div>*/}
             <div className="col-sm-12 col-lg-12">
-                <div className="container">
+                <div className="container-fluid">
                     <section className="p-0">
                         <Slider {...settings} className="slide-1 home-slider">
                             <div>
@@ -126,7 +126,7 @@ const Content = () => {
 
 
         {/*Sponsors*/}
-            <div className="container">
+            <section className="container-fluid">
                 <div className="row">
                     <div className="col">
                         <Slider {...sponsorSettings} className="product-6 product-m no-arrow">
@@ -144,14 +144,14 @@ const Content = () => {
                     </div>
 
                 </div>
-            </div>
+            </section>
 
         {/*sponsrs*/}
 
         {/*Categories*/}
 
         <section className="flat-row row-image-box">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="title1  section-t-space">
 
                     <h2 className="title-inner1"> Product Categories</h2>
