@@ -19,10 +19,10 @@ class LatestComponent extends Component {
         var settings = {
             infinite: true,
             dots: false,
-            speed: 300,
+            speed: 3000,
             slidesToShow: 5,
             slidesToScroll: 5,
-            autoplay: true,
+            autoplay: false,
             autoplaySpeed: 3000,
             responsive: [
                 {
@@ -50,11 +50,11 @@ class LatestComponent extends Component {
                 {/*Paragraph*/}
                 <div className="title1  section-t-space">
 
-                    <h2 className="title-inner1">Featured {categoryNameFriendly} Products</h2>
+                    <h2 className="title-inner1">Featured {categoryNameFriendly} Products </h2>
                 </div>
                 {/*Paragraph End*/}
                 <section className="section-b-space p-t-0">
-                    <div className="container">
+                    <div className="container-fluid">
                         <div className="row">
                             <div className="col">
                                 <Slider {...settings} className="product-4 product-m no-arrow">

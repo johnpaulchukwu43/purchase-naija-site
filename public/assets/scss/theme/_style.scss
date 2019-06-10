@@ -2428,7 +2428,19 @@ header {
     }
   }
 }
-
+.view-more {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  display: none;
+  color: #fff;
+  text-align: center;
+  background: $theme-deafult;
+  border: none;
+  font-size: 22px;
+  padding: 7px;
+  cursor: pointer;
+}
 
 /*=====================
     11.Theme tab CSS start
@@ -3853,6 +3865,11 @@ footer{
   top: 20%;
   right: -8px;
   padding: 3px;
+}
+.footer-end{
+  p{
+    font-size:19px
+  }
 }
 
 /*=====================
