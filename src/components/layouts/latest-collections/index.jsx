@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Slider from 'react-slick';
 import {connect} from 'react-redux'
 
-import {addToCart, addToWishlist, addToCompare} from "../../../actions";
 import LatestProductItem from './latest-product-item'
 import PropTypes from "prop-types";
 import {getProductsInSpecifiedCategory} from "../../../services";
+import { addToWishlist, addToCompare} from '../../../actions'
+import {addToCartWithoutSpecifyingQuantity} from "../../../actions/cartActions";
 
 
 class LatestComponent extends Component {
@@ -87,4 +88,4 @@ LatestComponent.propTypes = {
 
 };
 
-export default connect(mapStateToProps, {addToCart, addToWishlist, addToCompare}) (LatestComponent);
+export default connect(mapStateToProps, {addToCart:addToCartWithoutSpecifyingQuantity, addToWishlist, addToCompare}) (LatestComponent);
