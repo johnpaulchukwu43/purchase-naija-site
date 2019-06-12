@@ -2048,6 +2048,14 @@
 }
 
 @media(max-width: 767px) {
+  .checkout-page {
+    .checkout-form {
+      .checkout-details {
+        margin-top: 20px;
+      }
+    }
+  }
+
   .product-category-wrapper{
     margin-bottom: 20px;
   }

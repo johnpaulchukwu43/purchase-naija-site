@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import {Transaction, Card} from 'paystack-js';
-
 import Breadcrumb from "../common/breadcrumb";
 import {removeFromWishlist} from '../../actions'
 import {getCartTotal} from "../../services";
 import {connect} from "react-redux";
-import {PaystackPop} from 'custom-paystack-js'
 import {toast} from "react-toastify";
 import {checkOutCart, externalRefreshCart} from "../../actions/cartActions";
 import {updateUserInfo} from "../../actions/authActions";
@@ -34,7 +31,8 @@ class checkOut extends Component {
             billingAddress2: userInfo.billingAddress2,
             paymentID: '',
             userCart: cartItems,
-            total: total
+            total: total,
+            isLoading: false
         };
         this.validator = new SimpleReactValidator();
     }
@@ -46,6 +44,12 @@ class checkOut extends Component {
 
     };
 
+    componentDidMount() {
+        this.loadScript((message) => {
+            console.log(message);
+        });
+    }
+
     setStateFromCheckbox = (event) => {
         var obj = {};
         obj[event.target.name] = event.target.checked;
@@ -56,19 +60,16 @@ class checkOut extends Component {
         }
     }
 
-    checkhandle(value)
-     {
+    checkhandle(value) {
         this.setState({
             paymentType: value
         })
     }
 
 
-
     // TPA Integration
     onSuccess = (payment, order) => {
         const {symbol, total, cartItems} = this.props;
-        console.log("The payment was succeeded!", cartItems);
         this.props.history.push({
             pathname: '/order-success',
             state: {payment: payment, items: cartItems, orderTotal: total, symbol: symbol, orderInfo: order}
@@ -76,42 +77,67 @@ class checkOut extends Component {
 
     };
 
-    payAsPayStack = (cb=()=>{}) => {
-            var handler = PaystackPop.setup({
-                email:  this.state.email,
-                amount:  this.state.total*100,
-                key:process.env.PAYSTACK_KEY,
-                firstname:  this.state.firstname,
-                lastname:  this.state.lastname,
-                // label: "Optional string that replaces customer email"
-                onClose: function () {
-                    const msg = 'The payment was cancelled!';
-                    alert(msg);
-                },
-                callback: function (response) {
-                    const ref =response.reference;
-                    var message = 'Payment complete! Reference: ' + ref;
-                    axios.get(verifyTransactionStatus(response.reference)).then(result=>{
-                        console.log(JSON.stringify(result));
-                        if(result.data.data.status === 'success'){
-                             message = 'Payment completed Successfully! Reference: ' + ref;
-                            toast.info(message);
-                            cb({paymentSuccess:true,ref:ref});
-                        }else{
-                             message = 'Payment is still being Processed, Check Dashboard for progress ';
-                            toast.info(message);
-                            cb({paymentSuccess:false});
-
-                        }
-                    }).catch(err=>{
-                        var message = err.message;
-                        toast.info(message);
-                        cb({paymentSuccess:true});
-                    })
+    //load external paystack script
+    loadScript = (callback) => {
+        const script = document.createElement("script");
+        script.src = "https://js.paystack.co/v1/inline.js";
+        document.getElementsByTagName("head")[0].appendChild(script);
+        if (script.readyState) {
+            // IE
+            script.onreadystatechange = () => {
+                if (
+                    script.readyState === "loaded" ||
+                    script.readyState === "complete"
+                ) {
+                    script.onreadystatechange = null;
+                    callback("loaded script");
                 }
-            });
+            };
+        } else {
+            // Others
+            script.onload = () => {
+                callback("failed to load");
+            };
+        }
+    };
 
-            handler.openIframe();
+
+    payAsPayStack = (cb = () => {}) => {
+        var handler = window.PaystackPop.setup({
+            email: this.state.email,
+            amount: this.state.total * 100,
+            key: process.env.PAYSTACK_KEY,
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            // label: "Optional string that replaces customer email"
+            onClose: function () {
+                const msg = 'The payment was cancelled!';
+                cb({paymentSuccess: false});
+                alert(msg);
+            },
+            callback: function (response) {
+                const ref = response.reference;
+                var message = 'Payment Initiated! Reference: ' + ref;
+                axios.get(verifyTransactionStatus(response.reference)).then(result => {
+                    if (result.data.data.status === 'success') {
+                        message = 'Payment completed Successfully! Reference: ' + ref;
+                        toast.info(message);
+                        cb({paymentSuccess: true, ref: ref});
+                    } else {
+                        message = 'Payment is still being Processed, Check Dashboard for progress ';
+                        toast.info(message);
+                        cb({paymentSuccess: false});
+
+                    }
+                }).catch(err => {
+                    var message = err.message;
+                    toast.info(message);
+                    cb({paymentSuccess: true});
+                })
+            }
+        });
+
+        handler.openIframe();
     };
 
     checkOutCartAction = (paymentId) => {
@@ -122,11 +148,12 @@ class checkOut extends Component {
         }
         const userId = this.state.userId;
         this.props.checkOutCart(userId, this.state).then(result => {
+            this.showLoadBar(false);
             const orderDetails = result.orderInfo;
-            console.log(orderDetails);
             this.props.externalRefreshCart(userId, CHECKOUT_SUCCESS, "customer");
             this.onSuccess(this.state, orderDetails);
         }).catch(err => {
+            this.showLoadBar(false);
             toast.error("Could not Checkout Product, Try Again" + err.message);
         })
     };
@@ -138,7 +165,6 @@ class checkOut extends Component {
     updateUserInfo = (userId, data) => {
         return new Promise((resolve, reject) => {
             this.props.updateUserInfo(data => {
-                console.log(JSON.stringify(data));
                 if (data.success === false) {
                     reject("Could not Update User Info, Before Checkout");
                 } else {
@@ -157,30 +183,47 @@ class checkOut extends Component {
         return true;
     };
 
-    makePayment = () => {
-        if (this.isValidInputs()) {
-            const userId = this.state.userId;
-            this.updateUserInfo(userId, this.state).then(valid => {
-                if (this.state.paymentType === E_PAYMENT) {
-                    this.payAsPayStack(result=>{
-                        if(result.paymentSuccess){
-                            this.checkOutCartAction(result.ref);
-                        }
-                    });
-                }
-                else {
-                    this.payOnDelivery();
-                }
+    showLoadBar = (boolVal)=>{
+        this.setState({
+            isLoading:boolVal
+        })
+    };
 
-            }).catch(err => {
-                console.log(JSON.stringify(err));
-            })
+    makePayment = () => {
+        //check for validation errors
+        if (this.isValidInputs()) {
+            //ensure that cart is not empty
+            if(this.props.cartItems.length !== 0){
+                this.showLoadBar(true);
+                const userId = this.state.userId;
+                this.updateUserInfo(userId, this.state).then(valid => {
+                    if (this.state.paymentType === E_PAYMENT) {
+                        this.payAsPayStack(result => {
+                            this.showLoadBar(false);
+                            if (result.paymentSuccess) {
+                                this.checkOutCartAction(result.ref);
+                            }
+                        });
+                    }
+                    else {
+                        this.payOnDelivery();
+                    }
+
+                }).catch(err => {
+                    toast.error("Could not update user info before checkout. Pls try again");
+                })
+            }else{
+                toast.info("No Products in cart. Go Shopping");
+            }
+
+        } else {
+            toast.error("Enter valid inputs for required fields");
         }
     };
 
 
     render() {
-        const {cartItems, symbol, total, userInfo, checkOutCart, updateUserInfo, externalRefreshCart} = this.props;
+        const {cartItems, symbol, total} = this.props;
 
         return (
             <div>
@@ -309,10 +352,23 @@ class checkOut extends Component {
                                                     </div>
                                                     {/*{(total !== 0)?*/}
                                                     <div className="text-right">
-                                                        <button type="button" className="btn-solid btn"
-                                                                onClick={() => this.makePayment()}>Place
+                                                        {this.state.isLoading ?
+                                                        (<div className="lds-ring">
+                                                                <div></div>
+                                                                <div></div>
+                                                                <div></div>
+                                                                <div></div>
+                                                            </div>
+                                                        ) :
+                                                            (
+                                                            <button type="button" className="btn-solid btn"
+                                                            onClick={() => this.makePayment()}>Place
                                                             Order
-                                                        </button>
+                                                            </button>
+                                                            )
+                                                        }
+
+
                                                     </div>
                                                 </div>
                                             </div>
