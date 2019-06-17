@@ -43,7 +43,7 @@ class FilterBar extends Component {
     };
 
     clickBrandHendle(event, brands) {
-
+        this.closeFilter();
         var index = brands.indexOf(event.target.value);
         if (event.target.checked)
             brands.push(event.target.value); // push in array checked value
@@ -66,6 +66,7 @@ class FilterBar extends Component {
 
 
     handlePriceFilterAction = ()=>{
+
         const {minPrice,maxPrice} = this.state;
         let priceRange = {
             value:{
@@ -74,6 +75,7 @@ class FilterBar extends Component {
             }
         };
         this.props.filterProductsResult(this.state.categoryName,PRICE_RANGE,priceRange);
+        this.closeFilter();
     };
 
     onChange = (e)=> {
