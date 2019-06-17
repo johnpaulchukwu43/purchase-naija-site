@@ -32,7 +32,7 @@ const Content = () => {
         slidesToShow: 6,
         slidesToScroll: 6,
         autoplay: true,
-        autoplaySpeed: 3000,
+        autoplaySpeed: 7000,
         responsive: [
             {
                 breakpoint: 600,
@@ -69,7 +69,11 @@ const Content = () => {
             {/*</Carousel>*/}
             <div className="container-fluid">
                 <section className="p-0">
-                    <Carousel showArrows={true} className="slide-1 home-slider">
+                    <Carousel showArrows={true} className="slide-1 home-slider"
+                              autoPlay
+                              interval={5000}
+                              showThumbs={false}
+                              showStatus={false}infiniteLoop>
                         <div className="home text-center img-fluid">
                             <picture>
                                 <source
