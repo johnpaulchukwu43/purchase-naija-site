@@ -4,10 +4,53 @@
 ==========================*/
 
 @media(min-width: 1430px) {
+  .mobile-categories-view{
+    display: none !important;
+  }
   .product-category-text{
     color: white;
     font-size: 25px;
     font-weight: bold;
+  }
+  .product-category-wrapper{
+    margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:35%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:40%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:45%;
+
+      }
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:30%;
+
+    }
   }
 
   .container{
@@ -16,6 +59,9 @@
 }
 
 @media (max-width: 1430px) {
+  .mobile-categories-view{
+    display: none !important;
+  }
   .product-category-text{
     color: white;
     font-size: 25px;
@@ -217,9 +263,60 @@
 
   .product-category-text{
     color: white;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
   }
+  .product-category-wrapper{
+    margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:25%;
+        color: #fff;
+        font-size:20px;
+        font-weight:bold;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:40%;
+        color: #fff;
+
+
+      };
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:25%;
+        color: #fff;
+        font-size:20px;
+        font-weight:bold;
+      }
+      i{
+        position:absolute;
+        top:60%;
+        left:45%;
+        color: #fff;
+
+      }
+
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:30%;
+
+    }
+  }
+
 
   h2 {
     font-size: 32px;
@@ -490,8 +587,55 @@
 @media(max-width: 1199px) {
   .product-category-text{
     color: white;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
+  }
+  .product-category-wrapper{
+    margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:25%;
+        color: #fff;
+        font-size:20px;
+        font-weight:bold;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:40%;
+
+      };
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:25%;
+        color: #fff;
+        font-size:20px;
+        font-weight:bold;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:45%;
+
+      }
+
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:30%;
+
+    }
   }
   .top-header .header-contact{
     display: none;
@@ -745,11 +889,7 @@
     }
   }
   .home-slider {
-    .home {
-      height: 70vh;
-    }
     .slider-contain {
-      height: 70vh;
       h1 {
         font-size: 50px;
       }
@@ -1411,11 +1551,7 @@
     border-bottom: 1px solid lighten($black, 86.5%) !important;
   }
   .home-slider {
-    .home {
-      height: 65vh;
-    }
     .slider-contain {
-      height: 65vh;
       h1 {
         font-size: 36px;
       }
@@ -2060,9 +2196,57 @@
     margin-bottom: 20px;
   }
 
+  .mobile-categories-view{
+    display:block !important;
+  }
+  .categories-view{
+     display:none !important;
+   }
+  .product-category-wrapper{
+    margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:35%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:40%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:45%;
+
+      }
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:30%;
+
+    }
+  }
+
+
   .product-category-text{
     color: white;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
   }
 
@@ -2714,11 +2898,7 @@
     }
   }
   .home-slider {
-    .home {
-      height: 60vh;
-    }
     .slider-contain {
-      height: 60vh;
       h1 {
         font-size: 35px;
         margin-top: 5px;
@@ -3171,6 +3351,16 @@
   }
 }
 
+@media(min-width:768px){
+  .onhover-div:hover {
+    .show-div {
+      opacity: 1;
+      transform: translateY(0px);
+      visibility: visible;
+    }
+  }
+}
+
 @media (max-width: 577px) {
   #fb-root{
     display: none;
@@ -3179,7 +3369,7 @@
     padding-bottom: 30px;
   }
   section, .section-t-space {
-    padding-top: 30px;
+    padding-top: 20px;
   }
   h2 {
     font-size: 24px;
@@ -3457,11 +3647,7 @@
     }
   }
   .home-slider {
-    .home {
-      height: 58vh;
-    }
     .slider-contain {
-      height: 58vh;
       h1 {
         font-size: 30px;
       }
@@ -4117,11 +4303,48 @@
 @media (max-width: 480px) {
   .product-category-wrapper{
     margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:25%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:35%;
+
+      }
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:15%;
+
+    }
   }
 
   .product-category-text{
     color: white;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: bold;
   }
 
@@ -4223,11 +4446,7 @@
     }
   }
   .home-slider {
-    .home{
-      height: 55vh;
-    }
     .slider-contain {
-      height: 55vh;
       h1 {
         font-size: 28px;
       }
@@ -4587,11 +4806,48 @@
 
   .product-category-wrapper{
     margin-bottom: 20px;
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:25%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:35%;
+
+      }
+    }
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:25%;
+
+    }
   }
 
   .product-category-text{
     color: white;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
   }
 
@@ -5064,11 +5320,50 @@
 @media (max-width: 360px){
   .product-category-wrapper{
     margin-bottom: 20px;
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:25%;
+
+    }
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:25%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:35%;
+
+      }
+    }
   }
+
+
 
   .product-category-text{
     color: white;
-    font-size: 19px;
+    font-size: 15px;
     font-weight: bold;
   }
 
@@ -5159,11 +5454,7 @@
     }
   }
   .home-slider {
-    .home {
-      height: 50vh;
-    }
     .slider-contain {
-      height: 50vh;
       h1 {
         font-size: 25px;
       }
@@ -5434,11 +5725,48 @@
 
   .product-category-wrapper{
     margin-bottom: 20px;
+    h4{
+      position:absolute;
+      top:50%;
+      left:20%;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:20%;
+
+    }
+    .manufacturing-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:20%;
+
+      }
+    }
+    .fashion-text{
+      h4{
+        position:absolute;
+        top:50%;
+        left:30%;
+      }
+      i{
+        position:absolute;
+        top:55%;
+        left:30%;
+
+      }
+    }
   }
 
   .product-category-text{
     color: white;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: bold;
   }
   .product-category-img-wrapper{

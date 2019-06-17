@@ -10,7 +10,7 @@ class TopBar extends Component {
 
 
     render() {
-        const {translate} = this.props;
+        const {translate,hideOtherViews} = this.props;
         return (
             <div className="top-header">
                 <div className="container-fluid">
@@ -24,7 +24,7 @@ class TopBar extends Component {
                             </div>
                         </div>
                         <div className="col-lg-6 text-right">
-                            <ul className="header-dropdown">
+                            <ul className="header-dropdown" onClick={hideOtherViews}>
                                 <li className="mobile-wishlist compare-mobile"><Link to={`${process.env.PUBLIC_URL}/compare`}><i className="fa fa-random" aria-hidden="true"></i>{translate('compare')}</Link></li>
                                 <li className="mobile-wishlist"><Link to={`${process.env.PUBLIC_URL}/wishlist`}><i className="fa fa-heart" aria-hidden="true"></i>{translate('wishlist')}</Link></li>
                                 <li className="mobile-wishlist"><Link to={`${process.env.PUBLIC_URL}/pages/service-provider/register`} data-lng="en">Sell on Purchase Naija</Link></li>

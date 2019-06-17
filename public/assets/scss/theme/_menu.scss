@@ -1490,7 +1490,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
   .main-menu {
     .menu-right {
       .icon-nav {
-        .mobile-search, .mobile-cart, .mobile-setting, .mobile-account {
+        .mobile-search,.mobile-home,.mobile-cart, .mobile-setting, .mobile-account {
           i {
             display: none;
           }
@@ -1500,7 +1500,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
             }
           }
         }
-        .mobile-search {
+        .mobile-search,.mobile-home {
           display: none;
         }
       }
@@ -1511,7 +1511,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
   .mobile-account-style{
     color: #333333 !important;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     text-transform: capitalize;
   }
   .sticky {
@@ -1601,7 +1601,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
     }
     .menu-right {
       .icon-nav {
-        .mobile-setting, .mobile-cart,.mobile-search,.mobile-account {
+        .mobile-setting, .mobile-cart,.mobile-home,.mobile-account {
           position: fixed;
           bottom: 20px;
           right: 16%;
@@ -1618,7 +1618,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
           }
         }
         .mobile-account{
-          right: 30%;
+          right: 25%;
           i {
             display: inline-block;
             font-size: 22px;
@@ -1631,6 +1631,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
           }
         }
         .mobile-setting {
+          right: 10%;
           i {
             display: inline-block;
             font-size: 22px;
@@ -1665,8 +1666,8 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
             }
           }
         }
-        .mobile-search {
-          right: 80%;
+        .mobile-home {
+          right: 85%;
           z-index: 1;
           i {
             display: inline-block;
@@ -1719,7 +1720,19 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
     .main-menu {
       .menu-right {
         .icon-nav {
-          .mobile-setting, .mobile-cart,.mobile-search {
+          //.mobile-setting, .mobile-cart,.mobile-search {
+          //  right: unset;
+          //  left:16%;
+          //  .show-div {
+          //    left: unset;
+          //    right:0;
+          //    &.shopping-cart {
+          //      left: unset !important;
+          //      right: -118px !important;
+          //    }
+          //  }
+          //}
+          .mobile-setting, .mobile-cart,.mobile-home {
             right: unset;
             left:16%;
             .show-div {
@@ -1740,7 +1753,7 @@ $theme-deafult__toggle-spacing: floor($theme-deafult__item-height * 0.1);
             right: unset;
             left:48%;
           }
-          .mobile-search {
+          .mobile-home {
             right: unset;
             left: 80%;
           }

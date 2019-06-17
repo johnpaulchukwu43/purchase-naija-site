@@ -710,13 +710,18 @@ header {
     border-radius: 0 !important;
 
   }
-  &:hover {
-    .show-div {
-      opacity: 1;
-      transform: translateY(0px);
-      visibility: visible;
-    }
+  .remove-div{
+    opacity: 1;
+    transform: translateY(0px);
+    visibility: visible;
   }
+  //&:hover {
+  //  .show-div {
+  //    opacity: 1;
+  //    transform: translateY(0px);
+  //    visibility: visible;
+  //  }
+  //}
 }
 .search-overlay{
   height: 100%;
@@ -1243,7 +1248,8 @@ header {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 75vh;
+    height: inherit;
+    max-height: 60vh;
     @for $i from 1 through 40 {
       &.home#{$i} {
         background-image:url("#{$assetspath}/home-banner/#{$i}.jpg");
@@ -1253,7 +1259,7 @@ header {
 
   .slider-contain {
     width: 100%;
-    height: 75vh;
+    //height: 75vh;
     display: flex;
     align-items: center;
     h1 {
@@ -1300,6 +1306,27 @@ header {
     .slick-prev {
       left: 100px;
     }
+  }
+}
+.home-slider{
+  .carousel{
+    .thumbs-wrapper{
+      display: none;
+    }
+  }
+  .content{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    margin-left: -45%;
+    width: 90%;
+    color: #fff;
+    opacity: 1;
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+    -webkit-transition: opacity 0.35s ease-in-out;
+    transition: opacity 0.35s ease-in-out
   }
 }
 .home-slider-container {
@@ -1646,6 +1673,57 @@ header {
 /*=====================
     9.Category CSS start
 ==========================*/
+.product-category-wrapper{
+  margin-bottom: 20px;
+  .manufacturing-text{
+    h4{
+      position:absolute;
+      top:50%;
+      left:30%;
+      color: #fff;
+      font-size:20px;
+      font-weight:bold;
+    }
+    i{
+      position:absolute;
+      top:60%;
+      left:50%;
+      color: #fff;
+
+
+    };
+  }
+  .fashion-text{
+    h4{
+      position:absolute;
+      top:50%;
+      left:25%;
+      color: #fff;
+      font-size:20px;
+      font-weight:bold;
+    }
+    i{
+      position:absolute;
+      top:55%;
+      left:50%;
+      color: #fff;
+
+    }
+
+  }
+  h4{
+    position:absolute;
+    top:50%;
+    left:30%;
+  }
+  i{
+    position:absolute;
+    top:55%;
+    left:30%;
+
+  }
+}
+
 .category-block{
   .category-image {
     margin: 0 auto;
