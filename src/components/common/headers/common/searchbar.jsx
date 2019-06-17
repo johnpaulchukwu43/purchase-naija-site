@@ -18,12 +18,9 @@ class   Search extends Component {
 
     };
 
-    doSearch = ()=>{
+    searchAction = ()=>{
         let {searchTerm} = this.state;
-        this.context.router.history.push({
-            pathname:SEARCH_ROUTE,
-            state: {searchTerm}
-        });
+        this.props.doSearch(searchTerm);
     };
 
     render (){
@@ -54,7 +51,7 @@ class   Search extends Component {
                             {/*</ul>*/}
                         </div>
                         <div className="input-group-append">
-                            <a className="btn btn-solid" onClick={this.doSearch}>
+                            <a className="btn btn-solid" onClick={this.searchAction}>
                                 <i className="fa fa-lg fa-search"></i>
                             </a>
                         </div>

@@ -14,7 +14,8 @@ import {connect} from "react-redux";
 import SearchComponent from "./common/searchbar";
 import {logout} from '../../../actions/authActions';
 import PropTypes from "prop-types";
-import {USER_DASHBOARD_ROUTE} from "../../../constants/app-routes";
+import {SEARCH_ROUTE, USER_DASHBOARD_ROUTE} from "../../../constants/app-routes";
+
 
 class HeaderOne extends Component {
 
@@ -22,21 +23,27 @@ class HeaderOne extends Component {
         super(props);
 
         this.state = {
-            isLoading: false
+            isLoading: false,
+            showAccountDiv:false,
+            showSettingsDiv:false,
+            searchTerm:''
         }
     }
 
     componentWillMount() {
+
+        this.unlisten = this.context.router.history.listen(() => this.hideOtherViews());
         window.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
+        this.unlisten();
         window.removeEventListener('scroll', this.handleScroll);
     }
 
     handleScroll = () => {
         let number = window.pageXOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
+        this.hideOtherViews();
         if (number >= 300) {
             document.getElementById("sticky").classList.add('fixed');
         } else {
@@ -53,6 +60,7 @@ class HeaderOne extends Component {
         if (openmyslide) {
             openmyslide.classList.add('open-side')
         }
+        this.hideOtherViews();
     }
 
     openSearch() {
@@ -77,16 +85,64 @@ class HeaderOne extends Component {
         this.context.router.history.push('/');
     }
 
+    toggleAccountDiv = ()=>{
+        //toggle the account view value
+        let val = !this.state.showAccountDiv;
+        //  set the settings div to  false, we want only one view per time
+        this.setState({
+           showAccountDiv:val,
+           showSettingsDiv:false
+       });
+    };
+
+    toggleSettingsDiv = ()=>{
+        //toggle the setting s view value
+        let settingVal = !this.state.showSettingsDiv;
+        //  set the account div to  false, we want only one view per time
+        this.setState({
+            showSettingsDiv:settingVal,
+            showAccountDiv:false
+        });
+    };
+
+    hideOtherViews = ()=>{
+        this.setState({
+            showSettingsDiv:false,
+            showAccountDiv:false
+        });
+    };
+
+    setStateFromInput = (event) => {
+        var obj = {};
+        obj[event.target.name] = event.target.value;
+        this.setState(obj);
+
+    };
+
+    searchAction = (e)=>{
+        e.preventDefault();
+        let {searchTerm} = this.state;
+        this.doSearch(searchTerm);
+        this.closeSearch();
+    };
+
+    doSearch = (searchTerm)=>{
+        this.context.router.history.push({
+            pathname:SEARCH_ROUTE,
+            state: {searchTerm}
+        });
+    };
+
     render() {
         const {isAuthenticated} = this.props.auth;
         const {translate} = this.props;
 
         const guestLinks = (
-            <li className="onhover-div  mobile-account">
+            <li id="account-guest" className="onhover-div  mobile-account" onClick={this.toggleAccountDiv}>
                 <div><img src={`${process.env.PUBLIC_URL}/assets/images/icon/auth.png`} width="25px" height="25px" className="img-fluid"
                           alt=""/>
                     <i className="fa fa-lg fa-user-circle" aria-hidden="true"></i>
-                    <ul className="show-div setting">
+                    <ul className={"show-div setting "+(this.state.showAccountDiv?"remove-div":null)}>
                         <li>
                             <h5><Link to={`${process.env.PUBLIC_URL}/pages/user/login`} data-lng="en" className="mobile-account-style">Login to Account</Link></h5>
                         </li>
@@ -100,12 +156,12 @@ class HeaderOne extends Component {
         );
 
         const userLinks = (
-            <li className="onhover-div  mobile-account">
+            <li id="account-user"  className="onhover-div  mobile-account" onClick={this.toggleAccountDiv}>
                 <div><img src={`${process.env.PUBLIC_URL}/assets/images/icon/auth.png`} width="25px" height="25px" className="img-fluid"
                           alt=""/>
                     <i className="fa fa-lg fa-user-circle" aria-hidden="true"></i>
                 </div>
-                <ul className="show-div setting">
+                <ul className={"show-div setting "+(this.state.showAccountDiv?"remove-div":null)}>
                     <li>
                        <h6><Link to={`${process.env.PUBLIC_URL}${USER_DASHBOARD_ROUTE}`} data-lng="en">DashBoard</Link></h6>
                     </li>
@@ -123,7 +179,7 @@ class HeaderOne extends Component {
                 <div className="mobile-fix-option"></div>
                 {/*Top Header Component*/}
 
-                <TopBar/>
+                <TopBar hideOtherViews ={this.hideOtherViews}/>
 
                 <div className="centralize-menu">
                     <div className="row">
@@ -148,7 +204,7 @@ class HeaderOne extends Component {
                                 </div>
                                 {/*<NavBar/>*/}
                                 <div className="search-section">
-                                    <SearchComponent/>
+                                    <SearchComponent doSearch = {this.doSearch}/>
                                 </div>
 
                                 <div className="menu-right pull-right">
@@ -162,7 +218,8 @@ class HeaderOne extends Component {
                                                     <div><img
                                                         src={`${process.env.PUBLIC_URL}/assets/images/icon/search.png`}
                                                         onClick={this.openSearch} className="img-fluid" alt=""/>
-                                                        <i className="fa fa-search" onClick={this.openSearch}></i></div>
+                                                        {/*<i className="fa fa-search" onClick={this.openSearch}></i>*/}
+                                                    </div>
                                                     <div id="search-overlay" className="search-overlay">
                                                         <div>
                                                             <span className="closebtn" onClick={this.closeSearch}
@@ -175,12 +232,14 @@ class HeaderOne extends Component {
                                                                                 <div className="form-group">
                                                                                     <input type="text"
                                                                                            className="form-control"
-                                                                                           id="exampleInputPassword1"
+                                                                                           id="searchTerm"
+                                                                                           name="searchTerm"
+                                                                                           value={this.state.searchTerm}
+                                                                                           onChange={this.setStateFromInput}
                                                                                            placeholder="Search a Product"/>
                                                                                 </div>
-                                                                                <button type="submit"
-                                                                                        className="btn btn-primary"><i
-                                                                                    className="fa fa-search"></i>
+                                                                                <button onClick={this.searchAction} className="btn btn-primary">
+                                                                                    <i className="fa fa-search"></i>
                                                                                 </button>
                                                                             </form>
                                                                         </div>
@@ -190,14 +249,14 @@ class HeaderOne extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <CartContainer/>
+                                                <CartContainer hideOtherViews ={this.hideOtherViews}/>
                                                 {/*settings*/}
-                                                <li className="onhover-div mobile-setting">
+                                                <li className="onhover-div mobile-setting" onClick={this.toggleSettingsDiv}>
                                                     <div><img
                                                         src={`${process.env.PUBLIC_URL}/assets/images/icon/setting.png`}
                                                         className="img-fluid" alt=""/>
                                                         <i className="fa fa-cog"></i></div>
-                                                    <div className="show-div setting">
+                                                    <div id="settings" className={"show-div setting "+(this.state.showSettingsDiv?"remove-div":null)}>
                                                         <h6>language</h6>
                                                         <ul>
                                                             <li><a href={null}
@@ -223,6 +282,11 @@ class HeaderOne extends Component {
                                                             </li>
                                                         </ul>
                                                     </div>
+                                                </li>
+                                                <li className="mobile-home">
+                                                    <Link to={`${process.env.PUBLIC_URL}/`}>
+                                                        <i className="fa fa-home"></i>
+                                                    </Link>
                                                 </li>
 
                                             </ul>
