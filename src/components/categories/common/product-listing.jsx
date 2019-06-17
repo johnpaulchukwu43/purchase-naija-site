@@ -13,7 +13,13 @@ class ProductListing extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {limit: 8, hasMoreItems: true, page_num: 1, page_size: 8,categoryName:props.categoryName};
+        this.state = {limit: 8,
+            hasMoreItems: true,
+            page_num: 1,
+            page_size: 8,
+            categoryName:props.categoryName,
+            isMobileView : window.innerWidth <= 577,
+        };
 
     }
 
@@ -112,7 +118,7 @@ class ProductListing extends Component {
 
         return (
             <div>
-                <div className="product-wrapper-grid">
+                <div className={"product-wrapper-grid "+ (this.state.isMobileView ? "list-view":"")}>
                     <div className="container-fluid">
                         <div className="paginated-component">
                             {content}

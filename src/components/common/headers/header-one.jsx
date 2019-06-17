@@ -55,7 +55,7 @@ class HeaderOne extends Component {
         store.dispatch(IntlActions.setLocale(lang))
     }
 
-    openNav() {
+    openNav = ()=> {
         var openmyslide = document.getElementById("mySidenav");
         if (openmyslide) {
             openmyslide.classList.add('open-side')

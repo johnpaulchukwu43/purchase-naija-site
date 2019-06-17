@@ -31,7 +31,7 @@ class SideBar extends Component {
                         </div>
                     </div>
                     {/*Vertical Menu*/}
-                    <ul id="sub-menu" className="sm pixelstrap sm-vertical ">
+                    <ul id="sub-menu" className="sm pixelstrap sm-vertical " onClick={this.closeNav}>
                         <li>
                             <Link to={`${process.env.PUBLIC_URL}/product/category/raw_materials`}>
                                 Raw Materials
