@@ -3362,6 +3362,21 @@
 }
 
 @media (max-width: 577px) {
+  header {
+    background-color: #333333;
+    i{
+      color:#ffff !important;
+    }
+  }
+  .sticky {
+    &.fixed {
+      background-color: #333333;
+      i{
+        color:#ffff !important;
+      }
+    }
+  }
+
   #fb-root{
     display: none;
   }
