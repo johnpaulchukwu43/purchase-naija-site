@@ -26,7 +26,8 @@ class HeaderOne extends Component {
             isLoading: false,
             showAccountDiv:false,
             showSettingsDiv:false,
-            searchTerm:''
+            searchTerm:'',
+            isMobileView : window.innerWidth <= 577
         }
     }
 
@@ -197,8 +198,15 @@ class HeaderOne extends Component {
                                     </div>
                                     <div className="brand-logo">
                                         <Link to={`${process.env.PUBLIC_URL}/`}>
-                                            <img src={`${process.env.PUBLIC_URL}/assets/images/icon/pnlogo.png`}
-                                                 className="img-fluid" alt=""/>
+                                            {this.state.isMobileView
+                                                ?
+                                                (<img src="https://res.cloudinary.com/jworks/image/upload/w_250,f_auto,fl_lossy,dpr_auto,q_auto/v1560899550/purchasenaija/production/logo-wh.png"
+                                                      className="img-fluid" alt=""/>)
+                                                :
+                                                (<img src={`${process.env.PUBLIC_URL}/assets/images/icon/pnlogo.png`}
+                                                      className="img-fluid" alt=""/>)
+
+                                            }
                                         </Link>
                                     </div>
                                 </div>
@@ -215,10 +223,11 @@ class HeaderOne extends Component {
                                                 {isAuthenticated ? userLinks : guestLinks}
                                                 {/*mobile-search*/}
                                                 <li className="onhover-div mobile-search">
-                                                    <div><img
-                                                        src={`${process.env.PUBLIC_URL}/assets/images/icon/search.png`}
-                                                        onClick={this.openSearch} className="img-fluid" alt=""/>
-                                                        {/*<i className="fa fa-search" onClick={this.openSearch}></i>*/}
+                                                    <div>
+                                                        {/*<img*/}
+                                                        {/*src={`${process.env.PUBLIC_URL}/assets/images/icon/search.png`}*/}
+                                                        {/*onClick={this.openSearch} className="img-fluid" alt=""/>*/}
+                                                        <i className="fa fa-search" style={{fontSize: 20}}onClick={this.openSearch}></i>
                                                     </div>
                                                     <div id="search-overlay" className="search-overlay">
                                                         <div>
