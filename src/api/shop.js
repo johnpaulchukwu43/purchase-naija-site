@@ -2,14 +2,11 @@
  * Mocking client-server processing
  */
 import _products from './data.json'
-import fashion from './fashion'
-import raw from './raw_material'
 import {
     BEAUTY_PRODUCT,
     COMPUTER_PRODUCT,
     ELECTRONICS_PRODUCT,
     FASHION_PRODUCT,
-    INCREMENT,
     MANUFACTURING_PRODUCT, PHONE_PRODUCT,
     RAW_MATERIALS_PRODUCT
 } from "../constants/ActionTypes";
@@ -68,7 +65,7 @@ const updateCartTypeAndOwner = (cb=()=>{},oldUserId,body)=>{
         .then(res=>{
             cb(catcher(res));
         });
-}
+};
 
 
 const deleteProductFromCart = (cb=()=>{}, userId, category, productId)=>{
@@ -146,7 +143,7 @@ const getAllProductsPaginated = (pageNumber,pageSize,cb= () => {})=>{
 
 
 const searchAllProducts = (searchTerm)=>{
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve)=>{
         let endpoint = searchAllProductsEndpoint(searchTerm);
         axiosInstance.get(endpoint)
             .then((response)=>{

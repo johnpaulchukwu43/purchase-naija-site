@@ -40,22 +40,24 @@ class Login extends Component {
         const notify = new Notify();
         if (this.isValid()) {
             this.setState({ errors: {}, isLoading: true });
-            let requestBody = {"email":this.state.email,"password":this.state.password};
-            this.props.login(requestBody).then(res=>{
+            let {auth, login} = this.props;
+            let requestBody = {
+                "email":this.state.email,
+                "password":this.state.password,
+                "guestId": auth.guest.guestId
+            };
+            login(requestBody).then(res=>{
                 //todo handle proper routing after successful login
                 this.setState({ isLoading: false});
-                let response = this.props.response;
-                if (response.loginError !== null) {
-                    notify.error(response.loginError.message);
-                }else{
+                if (res.success === true) {
                     notify.info("Welcome");
                     this.context.router.history.push('/');
+                }else{
+                    notify.error(auth.loginError.message);
                 }
-            }).catch((err)=>{
-                let response = this.props.response;
-                if (response.error) {
-                    notify.error(response.error.message);
-                }
+            }).catch((data)=>{
+                this.setState({ isLoading: false});
+                notify.error(data.error.message);
             })
         }
     }
@@ -74,48 +76,48 @@ class Login extends Component {
                 <Breadcrumb title={'Login'}/>
                 {/*Login section*/}
 
-                    <section className="login-page section-b-space">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="theme-card">
-                                        <form className="theme-form" onSubmit={this.onSubmit}>
-                                            {errors.form && <div className="alert alert-danger">{errors.form}</div>}
+                <section className="login-page section-b-space">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="theme-card">
+                                    <form className="theme-form" onSubmit={this.onSubmit}>
+                                        {errors.form && <div className="alert alert-danger">{errors.form}</div>}
 
-                                            <TextFieldGroup
-                                                field="email"
-                                                label="Email Address"
-                                                value={email}
-                                                error={errors.email}
-                                                onChange={this.onChange}
-                                            />
-                                            <TextFieldGroup
-                                                field="password"
-                                                label="Password"
-                                                value={password}
-                                                error={errors.password}
-                                                onChange={this.onChange}
-                                                type="password"
-                                            />
-                                            <button className="btn btn-solid" disabled={isLoading}>Login</button>
-                                        </form>
-                                    </div>
+                                        <TextFieldGroup
+                                            field="email"
+                                            label="Email Address"
+                                            value={email}
+                                            error={errors.email}
+                                            onChange={this.onChange}
+                                        />
+                                        <TextFieldGroup
+                                            field="password"
+                                            label="Password"
+                                            value={password}
+                                            error={errors.password}
+                                            onChange={this.onChange}
+                                            type="password"
+                                        />
+                                        <button className="btn btn-solid" disabled={isLoading}>Login</button>
+                                    </form>
                                 </div>
-                                <div className="col-lg-6 right-login">
-                                    <h3>New Customer</h3>
-                                    <div className="theme-card authentication-right">
-                                        <h6 className="title-font">Create A Account</h6>
-                                        <p>Sign up for a free account at our store. Registration is quick and easy. It
-                                            allows you to be able to order from our shop. To start shopping click
-                                            register.</p>
-                                        <Link className="btn btn-solid" to={`${process.env.PUBLIC_URL}/pages/user/register`}>
-                                            Create an Account
-                                        </Link>
-                                    </div>
+                            </div>
+                            <div className="col-lg-6 right-login">
+                                <h3>New Customer</h3>
+                                <div className="theme-card authentication-right">
+                                    <h6 className="title-font">Create A Account</h6>
+                                    <p>Sign up for a free account at our store. Registration is quick and easy. It
+                                        allows you to be able to order from our shop. To start shopping click
+                                        register.</p>
+                                    <Link className="btn btn-solid" to={`${process.env.PUBLIC_URL}/pages/user/register`}>
+                                        Create an Account
+                                    </Link>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
             </div>
         )
     }
@@ -129,7 +131,7 @@ Login.contextTypes = {
 };
 const mapStateToProps = (state) => {
     return {
-        response: state.auth
+        auth: state.auth
     };
 };
 

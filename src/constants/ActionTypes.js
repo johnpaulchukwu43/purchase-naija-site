@@ -96,6 +96,8 @@ export const REMOVE_FROM_WISHLIST = 'REMOVE_FROM_WISHLIST';
 export const ADD_TO_COMPARE = 'ADD_TO_COMPARE'
 export const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 
+//errorMessage
+export const API_SERVER_UNREACHABLE = 'Unable to get response from server, Try again.';
 
 
 // CheckOut Process

@@ -132,7 +132,7 @@ class checkOut extends Component {
                 }).catch(err => {
                     var message = err.message;
                     toast.info(message);
-                    cb({paymentSuccess: true});
+                    cb({paymentSuccess: false});
                 })
             }
         });
@@ -211,6 +211,7 @@ class checkOut extends Component {
 
                 }).catch(err => {
                     toast.error("Could not update user info before checkout. Pls try again");
+                    console.log(err);
                 })
             }else{
                 toast.info("No Products in cart. Go Shopping");

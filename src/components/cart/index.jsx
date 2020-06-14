@@ -30,7 +30,7 @@ class cartComponent extends Component {
                                     <tr className="table-head">
                                         <th scope="col">image</th>
                                         <th scope="col">product name</th>
-                                        <th scope="col">price</th>
+                                        <th scope="col">unit price</th>
                                         <th scope="col">quantity</th>
                                         <th scope="col">action</th>
                                         <th scope="col">total</th>

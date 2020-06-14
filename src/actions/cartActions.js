@@ -18,10 +18,10 @@ import Notify from '../utils/notification';
 const notify = new Notify();
 
 
-export function setGuestCart(user) {
+export function setGuestCart(guest) {
     return {
         type: CREATE_GUEST_CART,
-        user
+        guest
     };
 }
 
@@ -222,7 +222,6 @@ export const removeFromCart = (cartList, product) => dispatch => {
     let userId = cartList.guestId || cartList.userId;
     let category = product.productInfo.productCategory;
     let productId = product.productInfo._id;
-    console.log(userId, category, productId);
     shop.deleteProductFromCart(
         data => {
             if (data.client_error_message) {
@@ -232,7 +231,7 @@ export const removeFromCart = (cartList, product) => dispatch => {
             }
         }, userId, category, productId)
 
-}
+};
 
 export const refreshCart = (dispatch, userId, lastAction, cartType) => {
     dispatch(fetchCartBegin());
@@ -240,6 +239,7 @@ export const refreshCart = (dispatch, userId, lastAction, cartType) => {
         if (cartData.client_error_message) {
             throwFetchError(dispatch, cartData.client_error_message, cartData.response.data)
         } else {
+            //updating cart details from our api server
             dispatch(recieveCart(cartData.data.result));
             if (lastAction === DECREMENT) {
                 notify.success("Item removed from Cart");
@@ -247,6 +247,9 @@ export const refreshCart = (dispatch, userId, lastAction, cartType) => {
                 notify.success("Product removed from Cart");
             } else if (lastAction === CHECKOUT_SUCCESS) {
                 console.log("updated cart")
+            }
+            else if(lastAction === CREATE_USER_CART || lastAction === CREATE_GUEST_CART){
+                console.log("Fetch cart success")
             }
             else {
                 console.log("success");

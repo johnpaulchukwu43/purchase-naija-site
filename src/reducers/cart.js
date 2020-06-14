@@ -1,7 +1,5 @@
 import {
     ADD_TO_CART,
-    REMOVE_FROM_CART,
-    INCREMENT_QTY,
     CREATE_GUEST_CART,
     DECREMENT_QTY, RECEIVE_CART, CREATE_USER_CART
 } from "../constants/ActionTypes";
@@ -19,24 +17,21 @@ const initialState = {
 export default function cartReducer(state = initialState, action) {
     switch (action.type) {
         case CREATE_GUEST_CART:
-            const guestId = action.user.guestId;
+            const guestId = action.guest.guestId;
             return {
                 guestId:guestId,
                 cartInfo:{
                     cartType:"guest",
-                    products:[...state.cartInfo.products]
+                    products:[]
                 },
-                cart:state.cart
             };
         case CREATE_USER_CART:
-            console.log(JSON.stringify(action));
             return {
                 userId:action.user.userId,
                 cartInfo:{
                     cartType:"customer",
                     products:[...state.cartInfo.products]
                 },
-                cart:state.cart
             };
 
         case RECEIVE_CART:
@@ -48,7 +43,6 @@ export default function cartReducer(state = initialState, action) {
                         cartType:cartInfo.cartType,
                         products:cartInfo.products
                     },
-                    cart:state.cart
                 };
             }else{
                 return {
@@ -62,7 +56,7 @@ export default function cartReducer(state = initialState, action) {
             }
 
         case ADD_TO_CART:
-            const productId = action.product.id
+            const productId = action.product.id;
             if (state.cart.findIndex(product => product.id === productId) !== -1) {
                 const cart = state.cart.reduce((cartAcc, product) => {
                     if (product.id === productId) {
@@ -72,7 +66,7 @@ export default function cartReducer(state = initialState, action) {
                     }
 
                     return cartAcc
-                }, [])
+                }, []);
 
                 return { ...state, cart }
             }

@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import { addToWishlist, addToCompare} from '../../../actions'
 import ProductListItem from "./product-item";
 import {addToCartWithoutSpecifyingQuantity} from "../../../actions/cartActions";
-import {determineCategoryFromProductFromApiResult} from "../../../services";
+import {determineCategoryOfProductFromApiResult} from "../../../services";
 
 
 
@@ -16,7 +16,7 @@ class DumbProductListing extends Component {
     }
 
     getCategoryName = (product)=>{
-        return determineCategoryFromProductFromApiResult(product._source.productCategory);
+        return determineCategoryOfProductFromApiResult(product._source.productCategory);
     };
 
     normalizeData = (product)=>{
