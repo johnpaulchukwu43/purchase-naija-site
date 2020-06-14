@@ -7,6 +7,7 @@ import ProductListItem from "./product-item";
 import PropTypes from "prop-types";
 import Pagination from "react-js-pagination";
 import {getProductsInSpecifiedCategory} from "../../../services";
+import {API_SERVER_UNREACHABLE} from "../../../constants/ActionTypes";
 
 
 class ProductListing extends Component {
@@ -57,14 +58,13 @@ class ProductListing extends Component {
 
 
         let {
-            num_of_pages,
             error_message,
             page_size,
             current_page
         } = extractedInfo;
 
 
-        let content ;
+        let content;
 
         /*
             posssible failures
@@ -72,14 +72,26 @@ class ProductListing extends Component {
             2) Empty data list fetched initially from server:meaning no products yet
             3)Empty data list after searching /filtering
          */
-
         if(error_message){
             content= <div className="row">
                 <div className="col-sm-12 text-center section-b-space mt-5 no-found">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/empty-search.jpg`}
+                         alt="emptysearch"
                          className="img-fluid mb-4"/>
                     <h3>Sorry! Couldn't Fetch {categoryName}!!! </h3>
                     <p>{error_message.error}</p>
+                    <button className="btn btn-solid" onClick={this.fetchProducts}>Try Again</button>
+                </div>
+            </div>
+        }
+        else if(extractedInfo.data.length <= 0){
+            content= <div className="row">
+                <div className="col-sm-12 text-center section-b-space mt-5 no-found">
+                    <img src={`${process.env.PUBLIC_URL}/assets/images/empty-search.jpg`}
+                         alt="emptysearch"
+                         className="img-fluid mb-4"/>
+                    <h3>Sorry! Couldn't Fetch {categoryName}!!! </h3>
+                    <p>{API_SERVER_UNREACHABLE}</p>
                     <button className="btn btn-solid" onClick={this.fetchProducts}>Try Again</button>
                 </div>
             </div>

@@ -1,23 +1,34 @@
 import {
-    CREATE_USER_SUCCESSFUL, FAILED_TO_ADD_TO_CART,
-    GET_ERRORS, GET_GUEST_TOKEN_ERROR, GET_LOGIN_ERRORS, GET_PROVIDER_SIGNUP_ERRORS, GET_SIGNUP_ERRORS, GUEST_TOKEN,
+    API_SERVER_UNREACHABLE, CREATE_GUEST_CART,
+    CREATE_USER_CART,
+    CREATE_USER_SUCCESSFUL,
+    CUSTOMER_CART,
+    GET_GUEST_TOKEN_ERROR,
+    GET_LOGIN_ERRORS,
+    GET_PROVIDER_SIGNUP_ERRORS,
+    GET_SIGNUP_ERRORS, GUEST_CART,
+    GUEST_TOKEN,
     SET_CURRENT_USER,
     SET_CURRENT_USER_INFO,
-    SET_GUEST_USER, UPDATE_USER_INFO_FAILED, UPDATE_USER_PASSWORD_FAILED, USER_TOKEN
+    SET_GUEST_USER,
+    UPDATE_USER_INFO_FAILED,
+    UPDATE_USER_PASSWORD_FAILED,
+    USER_TOKEN
 } from "../constants/ActionTypes";
-import {setAuthorizationToken} from "../utils/setAuthorizationToken";
+import {hasTokenExpired, setAuthorizationToken} from "../utils/setAuthorizationToken";
 import axios from "axios";
 import jwtDecode from 'jwt-decode';
 import {
     GET_GUEST_TOKEN_ENDPOINT,
     LOGIN_SERVICE_PR0_ENDPOINT, LOGIN_USER_ENDPOINT,
     REGISTER_SERVICE_PR0_ENDPOINT,
-    REGISTER_USER_ENDPOINT, updateCartEndpoint, updateUserInfoEndpoint,
+    REGISTER_USER_ENDPOINT,
 } from "../constants/endpoints";
-import {setGuestCart, setUserCart} from "./cartActions";
-import store from "../store";
+import {externalRefreshCart,refreshCart} from "./cartActions";
 import * as types from "../constants/ActionTypes";
 import userRepo from "../api/userRepository"
+import {requestAndSaveNewGuestToken} from "../services/authorizationService";
+import {isBlank} from "../utils/stringUtils";
 
 //Auth
 export function setCurrentUser(user) {
@@ -42,24 +53,47 @@ export function setGuestUser(user) {
     };
 }
 
-export function logout() {
-    return dispatch => {
-        localStorage.removeItem('UserToken');
-        setAuthorizationToken(false);
-        dispatch(requestGuestToken());
+export const logout = () => (dispatch) => {
+    /*
+    * On user logOut:
+    * 1) remove user token
+    * 2) check if there is existing token,
+    *   i) if there is set as authorizationToken else request for another.
+    * */
+    localStorage.removeItem('UserToken');
+    let guestToken = localStorage.getItem('GuestToken');
+    if (isBlank(guestToken) || hasTokenExpired(guestToken)) {
+        requestAndSaveNewGuestToken();
+    }else{
+        setAuthorizationToken(guestToken);
+        const decodedGuestInfo = jwtDecode(guestToken);
+        console.log("current guest user after logout is"+JSON.stringify(decodedGuestInfo));
+        dispatch(setGuestUser(decodedGuestInfo));
+        if(decodedGuestInfo.hasOwnProperty("guestId")){
+            refreshCart(dispatch,decodedGuestInfo.guestId,CREATE_GUEST_CART,GUEST_CART)
+        }
     }
-}
+};
 
 
-export function login(data) {
-    return dispatch => {
-        return axios.post(LOGIN_USER_ENDPOINT, data).then(res => {
-            saveCredentials(dispatch,res)
-        }).catch(err=>{
-            throwLoginError(dispatch,err.response.data);
+export const login = (data) => (dispatch) => {
+    /*
+    * A couple of things happening after user successfully login
+    * 1) Fetch the current user(customer) cart from our api server
+    * 2) Lastly, we persist the current user and cart on our app
+    * */
+    return new Promise((resolve, reject) => {
+        axios.post(LOGIN_USER_ENDPOINT, data).then(authResponse => {
+            const customerId = authResponse.data.user.id;
+            saveCredentials(dispatch, authResponse);
+            refreshCart(dispatch, customerId, CREATE_USER_CART, CUSTOMER_CART);
+            resolve({success:true});
+        }).catch(err => {
+            throwLoginError(dispatch, err.response.data);
+            reject({success:false,error:err.response.data});
         })
-    }
-}
+    });
+};
 
 export const  updateUserInfo = (cb=()=>{},userId,data)=>(dispatch)=>{
     dispatch(updateUserInfoBegin());
@@ -118,16 +152,6 @@ export function SignUpServiceProviderRequest(userData) {
     };
 }
 
-export function requestGuestToken(){
-    return dispatch =>{
-        return axios.get(GET_GUEST_TOKEN_ENDPOINT).then(res=>{
-            saveGuestCredentials(dispatch,res);
-        }).catch(err=>{
-            throwGuestError(dispatch,err.response.data);
-        })
-    }
-}
-
 export const updateUserInfoBegin = () => ({
     type: types.UPDATE_USER_INFO_BEGIN
 });
@@ -145,71 +169,62 @@ export const updateUserInfoSuccess = () => ({
 });
 
 
-const throwLoginError = (dispatch,err)=>{
+const throwLoginError = (dispatch, err) => {
     dispatch({
         type: GET_LOGIN_ERRORS,
         payload: err
     });
 };
 
-const throwSignUpError = (dispatch,err)=>{
+const throwSignUpError = (dispatch, err) => {
     dispatch({
         type: GET_SIGNUP_ERRORS,
         payload: err
     });
 };
 
-const throwProviderSignUpError = (dispatch,err)=>{
+const throwProviderSignUpError = (dispatch, err) => {
     dispatch({
         type: GET_PROVIDER_SIGNUP_ERRORS,
         payload: err
     });
 };
 
-const throwGuestError = (dispatch,err)=>{
-    dispatch({
+export const throwGuestError = (err) => {
+    return {
         type: GET_GUEST_TOKEN_ERROR,
         payload: err
-    });
+    };
 };
 
-const userRegisterSuccess = (dispatch)=>{
+const userRegisterSuccess = (dispatch) => {
     dispatch({
-        type:CREATE_USER_SUCCESSFUL
+        type: CREATE_USER_SUCCESSFUL
     });
 };
 
-const providerRegisterSuccess = (dispatch)=>{
+const providerRegisterSuccess = (dispatch) => {
     dispatch({
-        type:CREATE_USER_SUCCESSFUL
+        type: CREATE_USER_SUCCESSFUL
     });
 };
 
-const saveCredentials =(dispatch,res)=>{
+const saveCredentials = (dispatch, res) => {
     const token = res.data.token;
     localStorage.setItem(USER_TOKEN, token);
-    localStorage.removeItem(GUEST_TOKEN);
     setAuthorizationToken(token);
     const decoded = jwtDecode(token);
     dispatch(setCurrentUser(decoded));
     dispatch(setCurrentUserInfo(res.data.user));
-    dispatch(setUserCart(decoded));
 };
 
-const saveGuestCredentials =(dispatch,res)=>{
-    const token = res.data.token;
-    localStorage.setItem(GUEST_TOKEN, token);
-    setAuthorizationToken(token);
-    const decoded = jwtDecode(token);
-    dispatch(setGuestUser(decoded));
-    dispatch(setGuestCart(decoded))
-};
+
 
 const throwUserUpdateError = (dispatch, client_error_message, debug_message) => {
     // toast.error(`Failed to Update User Info, ${debug_message}`);
     dispatch({
         type: UPDATE_USER_INFO_FAILED,
-        payload:  debug_message
+        payload: debug_message
     });
 };
 
@@ -217,6 +232,6 @@ const throwUserUpdatePasswordError = (dispatch, client_error_message, debug_mess
     // toast.error(`Failed to Update User Info, ${debug_message}`);
     dispatch({
         type: UPDATE_USER_PASSWORD_FAILED,
-        payload:  debug_message
+        payload: debug_message
     });
 };

@@ -62,11 +62,7 @@ import {
     PHONE_PRODUCT,
     RAW_MATERIALS_PRODUCT
 } from "./constants/ActionTypes";
-import {hasTokenExpired, setAuthorizationToken} from "./utils/setAuthorizationToken";
-import {logout, requestGuestToken, setCurrentUser, setGuestUser} from "./actions/authActions";
-import {setGuestCart, setUserCart} from "./actions/cartActions";
-
-
+import {checkUserType} from "./services/authorizationService"
 
 
 class Root extends React.Component {
@@ -74,115 +70,89 @@ class Root extends React.Component {
     fetchAllProducts = ()=>{
         store.dispatch(getAllProducts(1,10));
     };
-    UserToken;
-
-    setCustomerUser = ()=>{
-        setAuthorizationToken(localStorage.UserToken);
-        const decodedUser = jwtDecode(localStorage.UserToken);
-        store.dispatch(setCurrentUser(decodedUser));
-        this.setUserCart(decodedUser)
-    };
-    GuestToken;
-    setGuestUser = ()=>{
-        setAuthorizationToken(localStorage.GuestToken);
-        const decodedUser = jwtDecode(localStorage.GuestToken);
-        store.dispatch(setGuestUser(decodedUser));
-        this.setGuestCart(decodedUser);
-    };
-
-    checkUserType = ()=>{
-        //if the user is logged in and token is still valid, save the token else request for guest token
-
-        if (localStorage.UserToken) {
-            if(!hasTokenExpired(localStorage.UserToken))
-                this.setCustomerUser();
-            else{
-                store.dispatch(logout())
-            }
-        }else{
-            //IF THERE IS ALSO NO GUEST TOKEN REQUEST FOR ONE
-            if (!localStorage.GuestToken) {
-                store.dispatch(requestGuestToken());
-            }
-            //IF THERE IS A GUEST TOKEN, check if it is valid
-            else{
-                if(hasTokenExpired(localStorage.GuestToken)){
-                    store.dispatch(requestGuestToken());
-                }
-                this.setGuestUser();
-            }
-        }
-    };
-
-    setGuestCart = (user)=>{
-        store.dispatch(setGuestCart(user))
-    };
-    setUserCart = (user)=>{
-        store.dispatch(setUserCart(user))
-    };
-
 
 
     render() {
         this.fetchAllProducts();
-        this.checkUserType();
-
-        return(
-        	<Provider store={store}>
-                <IntlProvider translations={translations} locale='en'>
-				<BrowserRouter basename={'/'} >
-					<ScrollContext>
+        checkUserType();
+        return <Provider store={store}>
+            <IntlProvider translations={translations} locale='en'>
+                <BrowserRouter basename={'/'}>
+                    <ScrollContext>
                         <Layout>
                             <Switch>
-								<Route exact path={`${process.env.PUBLIC_URL}/`} component={Index}/>
+                                <Route exact path={`${process.env.PUBLIC_URL}/`} component={Index}/>
                                 {/*Product Categories*/}
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/devices`} component={PhonesCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/manufacturing`} component={ManufactruingCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/fashion`} component={FashionCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/computers`} component={ComputerCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/raw_materials`} component={RawMaterialsCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/beauty_products`} component={BeautyCategory}/>
-                                <Route path={`${process.env.PUBLIC_URL}/product/category/electronics`} component={ElectronicsCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/devices`}
+                                       component={PhonesCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/manufacturing`}
+                                       component={ManufactruingCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/fashion`}
+                                       component={FashionCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/computers`}
+                                       component={ComputerCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/raw_materials`}
+                                       component={RawMaterialsCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/beauty_products`}
+                                       component={BeautyCategory}/>
+                                <Route path={`${process.env.PUBLIC_URL}/product/category/electronics`}
+                                       component={ElectronicsCategory}/>
 
-								{/*Routes For Single Product*/}
-								<Route path={`${FASHION_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={FASHION_PRODUCT}/>}/>
-								<Route path={`${MANUFACTURING_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={MANUFACTURING_PRODUCT}/>}/>
-								<Route path={`${BEAUTY_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={BEAUTY_PRODUCT}/>}/>
-								<Route path={`${PHONE_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={PHONE_PRODUCT}/>}/>
-								<Route path={`${COMPUTER_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={COMPUTER_PRODUCT}/>}/>
-								<Route path={`${RAW_MATERIAL_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={RAW_MATERIALS_PRODUCT}/>}/>
-								<Route path={`${ELECTRONICS_SINGLE_PRODUCT_ROUTE}/:id`} render={(props) => <SingleProduct {...props} categoryType={ELECTRONICS_PRODUCT}/>}/>
+                                {/*Routes For Single Product*/}
+                                <Route path={`${FASHION_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props} categoryType={FASHION_PRODUCT}/>}/>
+                                <Route path={`${MANUFACTURING_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props}
+                                                                         categoryType={MANUFACTURING_PRODUCT}/>}/>
+                                <Route path={`${BEAUTY_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props} categoryType={BEAUTY_PRODUCT}/>}/>
+                                <Route path={`${PHONE_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props} categoryType={PHONE_PRODUCT}/>}/>
+                                <Route path={`${COMPUTER_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props} categoryType={COMPUTER_PRODUCT}/>}/>
+                                <Route path={`${RAW_MATERIAL_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props}
+                                                                         categoryType={RAW_MATERIALS_PRODUCT}/>}/>
+                                <Route path={`${ELECTRONICS_SINGLE_PRODUCT_ROUTE}/:id`}
+                                       render={(props) => <SingleProduct {...props}
+                                                                         categoryType={ELECTRONICS_PRODUCT}/>}/>
 
-								{/*Routes For custom Features*/}
-								<Route path={`${process.env.PUBLIC_URL}/cart`} component={Cart}/>
-								<Route path={`${process.env.PUBLIC_URL}/wishlist`} component={wishList}/>
-								<Route path={`${process.env.PUBLIC_URL}/compare`} component={Compare}/>
-								<Route path={`${process.env.PUBLIC_URL}/checkout`} component={protectedPage(checkOut,QuickRegisterAndLogin,'/pages/user/login-checkout-process')}/>
-								<Route path={`${process.env.PUBLIC_URL}/order-success`} component={orderSuccess}/>
+                                {/*Routes For custom Features*/}
+                                <Route path={`${process.env.PUBLIC_URL}/cart`} component={Cart}/>
+                                <Route path={`${process.env.PUBLIC_URL}/wishlist`} component={wishList}/>
+                                <Route path={`${process.env.PUBLIC_URL}/compare`} component={Compare}/>
+                                <Route path={`${process.env.PUBLIC_URL}/checkout`}
+                                       component={protectedPage(checkOut, QuickRegisterAndLogin, '/pages/user/login-checkout-process')}/>
+                                <Route path={`${process.env.PUBLIC_URL}/order-success`} component={orderSuccess}/>
 
-								{/*Routes For Extra Pages*/}
+                                {/*Routes For Extra Pages*/}
                                 <Route path={`${process.env.PUBLIC_URL}/pages/about-us`} component={aboutUs}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/404`} component={PageNotFound}/>
                                 <Route path={`${process.env.PUBLIC_URL}${USER_LOGIN_ROUTE}`} component={Login}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/user/login-checkout-process`} component={QuickRegisterAndLogin}/>
+                                <Route path={`${process.env.PUBLIC_URL}/pages/user/login-checkout-process`}
+                                       component={QuickRegisterAndLogin}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/user/register`} component={Register}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/register`} component={RegisterServiceProvider}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/login`} component={LoginServiceProvider}/>
-                                <Route path={`${process.env.PUBLIC_URL}${SEARCH_ROUTE}`} component={SearchResultContainer}/>
-                                <Route path={`${process.env.PUBLIC_URL}/pages/forget-password`} component={ForgetPassword}/>
+                                <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/register`}
+                                       component={RegisterServiceProvider}/>
+                                <Route path={`${process.env.PUBLIC_URL}/pages/service-provider/login`}
+                                       component={LoginServiceProvider}/>
+                                <Route path={`${process.env.PUBLIC_URL}${SEARCH_ROUTE}`}
+                                       component={SearchResultContainer}/>
+                                <Route path={`${process.env.PUBLIC_URL}/pages/forget-password`}
+                                       component={ForgetPassword}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/contact`} component={Contact}/>
-                                <Route path={`${process.env.PUBLIC_URL}${USER_DASHBOARD_ROUTE}`} component={protectedPage(Dashboard,Login,USER_LOGIN_ROUTE)}/>
+                                <Route path={`${process.env.PUBLIC_URL}${USER_DASHBOARD_ROUTE}`}
+                                       component={protectedPage(Dashboard, Login, USER_LOGIN_ROUTE)}/>
                                 <Route path={`${process.env.PUBLIC_URL}/pages/faq`} component={Faq}/>
 
-								{/*Blog Pages*/}
-								<Route component={PageNotFound} />
+                                {/*Blog Pages*/}
+                                <Route component={PageNotFound}/>
                             </Switch>
-						</Layout>
-					  </ScrollContext>
-					</BrowserRouter>
-                </IntlProvider>
-			</Provider>
-    	);
+                        </Layout>
+                    </ScrollContext>
+                </BrowserRouter>
+            </IntlProvider>
+        </Provider>
     }
 }
 

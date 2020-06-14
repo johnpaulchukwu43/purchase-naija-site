@@ -26,10 +26,10 @@ export const getBrands = (products) => {
                 uniqueBrands.push(tag);
             }
         })
-    )
+    );
     //console.log(uniqueBrands)
     return uniqueBrands;
-}
+};
 
 // Get Unique Colors from Json Data
 export const getColors = (products) => {
@@ -41,7 +41,7 @@ export const getColors = (products) => {
                 uniqueColors.push(color);
             }
         })
-    )
+    );
     //console.log(uniqueBrands)
     return uniqueColors;
 };
@@ -54,10 +54,10 @@ export const getMinMaxPrice = (products) => {
         let v = product.price;
         min = (v < min) ? v : min;
         max = (v > max) ? v : max;
-    })
+    });
 
     return {'min':min, 'max':max};
-}
+};
 
 export const getVisibleproducts = (data, { brand, color, value, sortBy, startPrice, endPrice }) => {
     return data.products.filter(product => {
@@ -87,7 +87,7 @@ export const getVisibleproducts = (data, { brand, color, value, sortBy, startPri
             return product2.name.localeCompare(product1.name);
         }
     });
-}
+};
 
 
 export const getVisibleRawproducts = (data, { brand, color, value, sortBy, startPrice, endPrice }) => {
@@ -110,7 +110,7 @@ export const getVisibleRawproducts = (data, { brand, color, value, sortBy, start
             return product2.name.localeCompare(product1.name);
         }
     });
-}
+};
 
 export const getCartTotal = cartItems => {
     var total = 0;
@@ -126,7 +126,7 @@ export const getPositionIncart = (products,id)=>{
         if(item.productId === id){
             pos = index;
         }
-    })
+    });
     return pos;
 };
 
@@ -135,33 +135,33 @@ export const getPositionIncart = (products,id)=>{
 export const getTopCollection = products => {
     const items = products.filter(product => {
         return product.rating > 4;
-    })
+    });
     return items.slice(0,8)
-}
+};
 
 // Get Best Seller
 export const getBestSeller = products => {
     const items = products.filter(product => {
         return product.sale === true;
-    })
+    });
 
     return items.slice(0,8)
-}
+};
 
 // Get Mens Wear
 export const getMensWear = products => {
     const items = products.filter(product => {
         return product.category === 'men';
-    })
+    });
 
     return items.slice(0,8)
-}
+};
 
 // Get Womens Wear
 export const getWomensWear = products => {
     const items = products.filter(product => {
         return product.category === 'women';
-    })
+    });
 
     return items.slice(0,8)
 };
@@ -204,7 +204,7 @@ export const determineRouteForSingleProductView = (categoryName)=>{
 };
 
 
-export const determineCategoryFromProductFromApiResult = (categoryName)=>{
+export const determineCategoryOfProductFromApiResult = (categoryName)=>{
     switch(categoryName){
         case fashionCollection:
             return FASHION_PRODUCT;

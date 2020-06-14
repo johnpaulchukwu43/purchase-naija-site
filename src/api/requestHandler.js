@@ -2,6 +2,7 @@
  Created by Johnpaul Chukwu @ $
 */
 import axios from 'axios'
+axios.defaults.timeout = process.env.REACT_APP_CONNECTION_TIMEOUT;
 
 export const axiosInstance = axios.create({
     validateStatus: function (status) {
