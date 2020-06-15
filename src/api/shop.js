@@ -12,10 +12,19 @@ import {
 } from "../constants/ActionTypes";
 import {
     BEAUTY_PRODUCT_ENDPOINT,
-    CART_ENDPOINT, COMPUTER_PRODUCT_ENDPOINT, ELECTRONICS_PRODUCT_ENDPOINT,
-    FASHION_PRODUCTS_ENDPOINT, GET_ALL_PRODUCTS_ENDPOINT,
-    getCartEndpoint, MANUFACTURING_PRODUCT_ENDPOINT, PHONE_PRODUCT_ENDPOINT,
-    RAW_MATERIAL_PRODUCT_ENDPOINT, searchAllProductsEndpoint, updateCartEndpoint, updateCartTypeAndOwnerEndpoint
+    CART_ENDPOINT,
+    COMPUTER_PRODUCT_ENDPOINT,
+    ELECTRONICS_PRODUCT_ENDPOINT,
+    FASHION_PRODUCTS_ENDPOINT,
+    GET_ALL_PRODUCTS_ENDPOINT,
+    getCartEndpoint,
+    getEndpointForAvailableColorsForGivenProductType, getEndpointForProductCategory,
+    MANUFACTURING_PRODUCT_ENDPOINT,
+    PHONE_PRODUCT_ENDPOINT,
+    RAW_MATERIAL_PRODUCT_ENDPOINT,
+    searchAllProductsEndpoint,
+    updateCartEndpoint,
+    updateCartTypeAndOwnerEndpoint
 } from "../constants/endpoints";
 import queryStringBuilder from "query-string-builder";
 
@@ -23,7 +32,7 @@ import  {axiosInstance,catcher} from './requestHandler'
 
 const TIMEOUT = 0;
 
-let endpoint = null;
+let paginatedEndpointForProductCategory = null;
 let page = null;
 let size = null;
 let category = null;
@@ -76,33 +85,6 @@ const deleteProductFromCart = (cb=()=>{}, userId, category, productId)=>{
         });
 };
 
-const getEndpointForProductCategory = (CATEGORY_TYPE)=>{
-    switch (CATEGORY_TYPE) {
-        case FASHION_PRODUCT:
-            endpoint = FASHION_PRODUCTS_ENDPOINT;
-            break;
-        case RAW_MATERIALS_PRODUCT:
-            endpoint = RAW_MATERIAL_PRODUCT_ENDPOINT;
-            break;
-         case ELECTRONICS_PRODUCT:
-            endpoint = ELECTRONICS_PRODUCT_ENDPOINT;
-            break;
-        case MANUFACTURING_PRODUCT:
-            endpoint = MANUFACTURING_PRODUCT_ENDPOINT;
-            break;
-        case COMPUTER_PRODUCT:
-            endpoint = COMPUTER_PRODUCT_ENDPOINT;
-            break;
-        case BEAUTY_PRODUCT:
-            endpoint = BEAUTY_PRODUCT_ENDPOINT;
-            break;
-        case PHONE_PRODUCT:
-            endpoint = PHONE_PRODUCT_ENDPOINT;
-            break;
-        default:
-            endpoint = null
-    }
-};
 
 const getProductsByCategory = (product_category,pageNumber,pageSize,cb= () => {})=>{
     page = pageNumber;
@@ -120,10 +102,13 @@ const getProductsByCategory = (product_category,pageNumber,pageSize,cb= () => {}
             category = product_category;
         }
     }
-    getEndpointForProductCategory(product_category);
-    endpoint = appendBasePageParam(endpoint,pageNumber,pageSize)+"&"+queryOptions+"&"+filterOptions;
-    console.log("getProductsByCategory: "+endpoint);
-    axiosInstance.get(endpoint)
+    let endpointForProductCategory = getEndpointForProductCategory(product_category);
+    if(endpointForProductCategory === null){
+        return cb({client_error_message:`Unable to fetch available products for ${product_category}. Please contact Site Admin.`});
+    }
+    paginatedEndpointForProductCategory = appendBasePageParam(endpointForProductCategory,pageNumber,pageSize)+"&"+queryOptions+"&"+filterOptions;
+    console.log("getProductsByCategory: "+paginatedEndpointForProductCategory);
+    axiosInstance.get(paginatedEndpointForProductCategory)
         .then((response)=>{
             cb(catcher(response));
         });
@@ -131,11 +116,20 @@ const getProductsByCategory = (product_category,pageNumber,pageSize,cb= () => {}
 
 
 
-
+const getAvailableColorsForProductInCategory = (product_category, cb =() =>{}) =>{
+    let endpointForAvailableColorsForGivenProductType = getEndpointForAvailableColorsForGivenProductType(product_category);
+    if(endpointForAvailableColorsForGivenProductType === null){
+        return cb({client_error_message:`Unable to fetch available colors for ${product_category}`});
+    }
+    axiosInstance.get(endpointForAvailableColorsForGivenProductType)
+        .then((response)=>{
+            cb(catcher(response));
+        });
+};
 
 const getAllProductsPaginated = (pageNumber,pageSize,cb= () => {})=>{
-    endpoint = appendBasePageParam(GET_ALL_PRODUCTS_ENDPOINT,pageNumber,pageSize);
-    axiosInstance.get(endpoint)
+    paginatedEndpointForProductCategory = appendBasePageParam(GET_ALL_PRODUCTS_ENDPOINT,pageNumber,pageSize);
+    axiosInstance.get(paginatedEndpointForProductCategory)
         .then((response)=>{
             cb(catcher(response));
         });
@@ -153,9 +147,9 @@ const searchAllProducts = (searchTerm)=>{
 };
 
 const sortProducts = (cb=()=>{},params)=>{
-    if(endpoint!=null){
+    if(paginatedEndpointForProductCategory!=null){
         //we remove all previous parameters appended on the url
-        let tempEndpoint = removeAllParamFromUrl(endpoint);
+        let tempEndpoint = removeAllParamFromUrl(paginatedEndpointForProductCategory);
         //after which we append our page Param
         tempEndpoint = appendBasePageParam(tempEndpoint,page,size);
         //append filter param if any
@@ -176,16 +170,16 @@ const sortProducts = (cb=()=>{},params)=>{
 };
 
 const filterProducts = (cb=()=>{},params)=>{
-    if(endpoint!=null){
+    if(paginatedEndpointForProductCategory!=null){
         //we remove all previous parameters appended on the url
-        let tempEndpoint = removeAllParamFromUrl(endpoint);
+        let tempEndpoint = removeAllParamFromUrl(paginatedEndpointForProductCategory);
         //after which we append our page Param
         tempEndpoint = appendBasePageParam(tempEndpoint,page,size);
         //append sort param if any
         if(queryOptions){
             tempEndpoint = tempEndpoint+"?"+queryOptions+"&";
         }else{
-            tempEndpoint = tempEndpoint+"?";
+            tempEndpoint = tempEndpoint+"&";
         }
         //create filter parameters
         let filterEndpoint = buildFilterQueries(tempEndpoint,params);
@@ -284,5 +278,6 @@ export default {
     updateCartTypeAndOwner,
     searchAllProducts,
     getAllProductsPaginated,
+    getAvailableColorsForProductInCategory,
     buyProducts: (payload, cb, timeout) => setTimeout(() => cb(), timeout || TIMEOUT)
 }

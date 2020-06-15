@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import { addToWishlist, addToCompare} from '../../../actions'
 import {addToCartWithoutSpecifyingQuantity} from '../../../actions/cartActions'
-import {getProductsByCategory} from '../../../actions/productActions'
+import {getAvailableColorsForProductsByCategory, getProductsByCategory} from '../../../actions/productActions'
 import ProductListItem from "./product-item";
 import PropTypes from "prop-types";
 import Pagination from "react-js-pagination";
-import {getProductsInSpecifiedCategory} from "../../../services";
+import {getAvailableColorsInSpecifiedCategory, getProductsInSpecifiedCategory} from "../../../services";
 import {API_SERVER_UNREACHABLE} from "../../../constants/ActionTypes";
 
 
@@ -26,10 +26,20 @@ class ProductListing extends Component {
 
     componentDidMount(){
         this.fetchProducts();
+        this.fetchAvailableColorsForProductsByCategory();
     }
 
     fetchProducts = () => {
         this.props.getProductsByCategory(this.state.categoryName,this.state.page_num, this.state.page_size);
+    };
+
+    fetchAvailableColorsForProductsByCategory = () =>{
+        let {all_categories,categoryName} = this.props;
+        //check if the available colors for product category have been fetched already, if it hasn't send dispatch to do fetching.
+        let {colors,error_message} = getAvailableColorsInSpecifiedCategory(categoryName,all_categories);
+        if(colors.length === 0 && error_message !=null){
+            this.props.getAvailableColorsForProductsByCategory(categoryName);
+        }
     };
 
     handlePageChange = (pageNum) => {
@@ -149,10 +159,16 @@ const mapStateToProps = (state) => ({
 
 
 ProductListing.propTypes = {
-    getProductsByCategory: PropTypes.func.isRequired
+    getProductsByCategory: PropTypes.func.isRequired,
+    getAvailableColorsForProductsByCategory: PropTypes.func.isRequired
 };
 
 export default connect(
     mapStateToProps,
-    {addToCart:addToCartWithoutSpecifyingQuantity, addToWishlist, addToCompare, getProductsByCategory}
+    {addToCart:addToCartWithoutSpecifyingQuantity,
+        addToWishlist,
+        addToCompare,
+        getProductsByCategory,
+        getAvailableColorsForProductsByCategory
+    }
 )(ProductListing)

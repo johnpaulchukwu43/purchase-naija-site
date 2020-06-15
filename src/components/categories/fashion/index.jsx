@@ -36,7 +36,7 @@ class FashionCategory extends Component {
                     <div className="collection-wrapper">
                         <div className="container">
                             <div className="row">
-                                <div className="col-sm-3 collection-filter">
+                                <div className="collection-filter">
                                     <StickyBox offsetTop={20} offsetBottom={20}>
                                         <div>
                                             <FilterBar categoryName = {FASHION_PRODUCT}/>

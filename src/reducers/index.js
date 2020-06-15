@@ -14,6 +14,7 @@ import searchReducer from "./search_products";
 
 
 const rootReducer = combineReducers({
+    //warning !! do not change keys of object here.
     data: productReducer,
     cartList: cartReducer,
     auth:authReducer,

@@ -1,3 +1,12 @@
+import {
+    BEAUTY_PRODUCT,
+    COMPUTER_PRODUCT,
+    ELECTRONICS_PRODUCT,
+    FASHION_PRODUCT,
+    MANUFACTURING_PRODUCT, PHONE_PRODUCT,
+    RAW_MATERIALS_PRODUCT
+} from "./ActionTypes";
+
 export const BASE_PATH = "/api/v1";
 export const LOGIN_USER_ENDPOINT = `${BASE_PATH}/user/login`;
 export const REGISTER_USER_ENDPOINT = `${BASE_PATH}/user/signup`;
@@ -48,3 +57,64 @@ export const MANUFACTURING_PRODUCT_ENDPOINT = `${BASE_PATH}/products/manufacturi
 export const PHONE_PRODUCT_ENDPOINT = `${BASE_PATH}/products/phone`;
 export const COMPUTER_PRODUCT_ENDPOINT = `${BASE_PATH}/products/computer`;
 export const GET_ALL_PRODUCTS_ENDPOINT = `${BASE_PATH}/getallproducts`;
+
+export const getEndpointForAvailableColorsForGivenProductType  = (CATEGORY_TYPE)=>{
+    let endpoint;
+    let getAllColorsPath='getAllColors/';
+    switch (CATEGORY_TYPE) {
+        case FASHION_PRODUCT:
+            endpoint = `${FASHION_PRODUCTS_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case RAW_MATERIALS_PRODUCT:
+            endpoint = `${RAW_MATERIAL_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case ELECTRONICS_PRODUCT:
+            endpoint = `${ELECTRONICS_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case MANUFACTURING_PRODUCT:
+            endpoint = `${MANUFACTURING_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case COMPUTER_PRODUCT:
+            endpoint = `${COMPUTER_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case BEAUTY_PRODUCT:
+            endpoint = `${BEAUTY_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        case PHONE_PRODUCT:
+            endpoint = `${PHONE_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            break;
+        default:
+            endpoint = null
+    }
+    return endpoint;
+};
+
+export const getEndpointForProductCategory = (CATEGORY_TYPE)=>{
+    let endpoint;
+    switch (CATEGORY_TYPE) {
+        case FASHION_PRODUCT:
+            endpoint = FASHION_PRODUCTS_ENDPOINT;
+            break;
+        case RAW_MATERIALS_PRODUCT:
+            endpoint = RAW_MATERIAL_PRODUCT_ENDPOINT;
+            break;
+        case ELECTRONICS_PRODUCT:
+            endpoint = ELECTRONICS_PRODUCT_ENDPOINT;
+            break;
+        case MANUFACTURING_PRODUCT:
+            endpoint = MANUFACTURING_PRODUCT_ENDPOINT;
+            break;
+        case COMPUTER_PRODUCT:
+            endpoint = COMPUTER_PRODUCT_ENDPOINT;
+            break;
+        case BEAUTY_PRODUCT:
+            endpoint = BEAUTY_PRODUCT_ENDPOINT;
+            break;
+        case PHONE_PRODUCT:
+            endpoint = PHONE_PRODUCT_ENDPOINT;
+            break;
+        default:
+            endpoint = null
+    }
+    return endpoint;
+};

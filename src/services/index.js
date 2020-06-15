@@ -182,6 +182,21 @@ export const getProductsInSpecifiedCategory = (specified_category,all_categories
     return {products,extractedInfo,product_length};
 };
 
+export const getAvailableColorsInSpecifiedCategory = (specified_category,all_categories)=>{
+    const allData = Object.entries(all_categories);
+    let colors = [];
+    let error_message = null;
+    for (const [category,values] of allData){
+        if(category === specified_category){
+            console.log("found match");
+            console.log("values:"+JSON.stringify(values.available_colors));
+            colors = [...values.available_colors.data];
+            error_message = values.available_colors.error_message;
+        }
+    }
+    return {colors,error_message};
+};
+
 export const determineRouteForSingleProductView = (categoryName)=>{
     switch(categoryName){
         case FASHION_PRODUCT:

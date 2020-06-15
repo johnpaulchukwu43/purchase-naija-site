@@ -68,7 +68,7 @@ import {checkUserType} from "./services/authorizationService"
 class Root extends React.Component {
 
     fetchAllProducts = ()=>{
-        store.dispatch(getAllProducts(1,10));
+        // store.dispatch(getAllProducts(1,10));
     };
 
 

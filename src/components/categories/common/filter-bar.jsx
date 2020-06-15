@@ -5,7 +5,7 @@ import 'react-input-range/lib/css/index.css';
 import { SlideToggle } from 'react-slide-toggle';
 
 
-import {getBrands, getColors, getMinMaxPrice} from '../../../services';
+import {getAvailableColorsInSpecifiedCategory, getBrands, getColors, getMinMaxPrice} from '../../../services';
 import {filterBrand, filterColor, filterPrice} from '../../../actions'
 import {filterProductsResult} from "../../../actions/productActions";
 import {
@@ -29,13 +29,23 @@ class FilterBar extends Component {
             showColorFilter:false,
             showBrandFilter:false,
             showPriceFilter:true,
-            categoryName:props.categoryName
+            categoryName:props.categoryName,
+            all_categories:props.all_categories,
+            colors:[]
         };
 
     }
 
     componentWillMount(){
         this.filterBarsToShow(this.state.categoryName);
+    }
+
+    componentDidMount(){
+        const {all_categories,categoryName} = this.state;
+        let {colors} = getAvailableColorsInSpecifiedCategory(categoryName,all_categories);
+        this.setState({
+            colors:colors
+        });
     }
 
     closeFilter = () => {
@@ -139,7 +149,7 @@ class FilterBar extends Component {
     }
     render (){
         const filteredBrands = this.props.filters.brand;
-        const {showColorFilter,showBrandFilter,showPriceFilter} = this.state;
+        const {showColorFilter,showBrandFilter,showPriceFilter,colors} = this.state;
         return (
                 <div className="collection-filter-block">
                     <div className="collection-mobile-back">
@@ -180,7 +190,7 @@ class FilterBar extends Component {
                                     <div className="collection-collapse-block-content" ref={setCollapsibleElement}>
                                         <div className="color-selector">
                                             <ul>
-                                                {this.props.colors.map((color, index) => {
+                                                {colors.map((color, index) => {
                                                     return (
                                                         <li className={color} title={color} onClick={(e) => this.colorHandle(e, color)} key={index}></li> )
                                                 })}
@@ -238,6 +248,7 @@ const mapStateToProps = state => ({
     colors: getColors(state.data.products),
     prices: getMinMaxPrice(state.data.products),
     filters: state.filters,
+    all_categories:state.categories,
     priceFilters:state.filter_temp.priceRangeReducer
 })
 
