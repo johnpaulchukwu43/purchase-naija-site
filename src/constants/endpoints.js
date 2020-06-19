@@ -58,30 +58,37 @@ export const PHONE_PRODUCT_ENDPOINT = `${BASE_PATH}/products/phone`;
 export const COMPUTER_PRODUCT_ENDPOINT = `${BASE_PATH}/products/computer`;
 export const GET_ALL_PRODUCTS_ENDPOINT = `${BASE_PATH}/getallproducts`;
 
-export const getEndpointForAvailableColorsForGivenProductType  = (CATEGORY_TYPE)=>{
+export const getEndpointForAvailableColorsForGivenProductType  = (category_type)=>{
+    return baseEndpointsForProductCategories(category_type,'getAllColors/')
+};
+
+export const getEndpointForAvailableBrandsForGivenProductType  = (category_type)=>{
+    return baseEndpointsForProductCategories(category_type,'getAllBrands/')
+};
+
+const baseEndpointsForProductCategories = (category_type, additional_path) =>{
     let endpoint;
-    let getAllColorsPath='getAllColors/';
-    switch (CATEGORY_TYPE) {
+    switch (category_type) {
         case FASHION_PRODUCT:
-            endpoint = `${FASHION_PRODUCTS_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${FASHION_PRODUCTS_ENDPOINT}/${additional_path}`;
             break;
         case RAW_MATERIALS_PRODUCT:
-            endpoint = `${RAW_MATERIAL_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${RAW_MATERIAL_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         case ELECTRONICS_PRODUCT:
-            endpoint = `${ELECTRONICS_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${ELECTRONICS_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         case MANUFACTURING_PRODUCT:
-            endpoint = `${MANUFACTURING_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${MANUFACTURING_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         case COMPUTER_PRODUCT:
-            endpoint = `${COMPUTER_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${COMPUTER_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         case BEAUTY_PRODUCT:
-            endpoint = `${BEAUTY_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${BEAUTY_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         case PHONE_PRODUCT:
-            endpoint = `${PHONE_PRODUCT_ENDPOINT}/${getAllColorsPath}`;
+            endpoint = `${PHONE_PRODUCT_ENDPOINT}/${additional_path}`;
             break;
         default:
             endpoint = null

@@ -25,6 +25,9 @@ export const FETCH_ALL_PRODUCTS_BEGIN = 'FETCH_ALL_PRODUCTS_BEGIN';
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
 export const FETCH_SINGLE_PRODUCT = 'FETCH_SINGLE_PRODUCT';
 export const FAILED_TO_FETCH_ERROR = 'FAILED_TO_FETCH_ERROR';
+export const fetchProductByCategorySuccess = (product_category) => 'FETCH '+product_category+' SUCCESS';
+export const fetchAvailableBrandsInProductCategorySuccess = (product_category) => 'FETCH AVAILABLE_BRANDS_IN' + product_category +' SUCCESS';
+export const fetchAvailableColorsInProductCategorySuccess = (product_category) => 'FETCH AVAILABLE_COLORS_IN' + product_category +' SUCCESS';
 //search
 export const SEARCH_ALL_PRODUCTS_BEGIN = 'SEARCH_ALL_PRODUCTS_BEGIN';
 export const SEARCH_ALL_PRODUCTS_SUCCESS = 'SEARCH_ALL_PRODUCTS_SUCCESS';
@@ -33,6 +36,7 @@ export const SEARCH_ALL_PRODUCTS_FAILED = 'SEARCH_ALL_PRODUCTS_FAILED';
 //
 export const SET_CATEGORY_TYPE = 'CATEGORY_TYPE';
 export const AVAILABLE_COLORS_IN = 'AVAILABLE_COLORS_IN';
+export const AVAILABLE_BRANDS_IN = 'AVAILABLE_BRANDS_IN';
 export const FILTER_TYPE = 'FILTER_TYPE';
 
 
@@ -99,6 +103,7 @@ export const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 
 //errorMessage
 export const API_SERVER_UNREACHABLE = 'Unable to get response from server, Try again.';
+export const NO_PRODUCTS_FOUND = 'No Products found !';
 
 
 // CheckOut Process

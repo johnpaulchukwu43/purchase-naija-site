@@ -13,7 +13,8 @@ import {ELECTRONICS_PRODUCT} from "../constants/ActionTypes";
 import {PHONE_PRODUCT} from "../constants/ActionTypes";
 import {BEAUTY_PRODUCT} from "../constants/ActionTypes";
 import Notify from "../utils/notification";
-import getAvailableColorsForProductInCategory from "./factory/getAvailableColorsForProductType";
+import {fetchAvailableBrandsInProductCategorySuccess} from "../constants/ActionTypes";
+import {fetchAvailableColorsInProductCategorySuccess} from "../constants/ActionTypes";
 
 const notify = new Notify();
 
@@ -49,14 +50,13 @@ export const fetchAvailableColorsForProductsByCategoryBegin = (CATEGORY) => ({
     type: `FETCH COLORS IN ${CATEGORY} BEGIN`
 });
 
+export const fetchAvailableBrandsForProductsByCategoryBegin = (CATEGORY) => ({
+    type: `FETCH BRANDS IN ${CATEGORY} BEGIN`
+});
+
 export const filterProductsBegin = (filter, option) => ({
     type: `FILTER_BY_${filter}`,
     payload: option
-});
-
-export const receiveProducts = products => ({
-    type: types.RECEIVE_PRODUCTS,
-    products
 });
 
 
@@ -103,7 +103,6 @@ export const getProductsByCategory = (product_category_name, pageNumber, pageSiz
     dispatch(fetchProductsByCategoryBegin(product_category_name));
     shop.getProductsByCategory(product_category_name, pageNumber, pageSize,
         data => {
-
             if (data.client_error_message) {
                 throwError(
                     dispatch,
@@ -125,16 +124,42 @@ export const getAvailableColorsForProductsByCategory = (product_category_name) =
     shop.getAvailableColorsForProductInCategory(product_category_name,
         data => {
             if (data.client_error_message) {
-                const errorType = types.AVAILABLE_COLORS_IN + product_category_name;
+                const errorDispatchType = types.AVAILABLE_COLORS_IN + product_category_name;
                 throwError(
                     dispatch,
-                    errorType,
+                    errorDispatchType,
                     data.client_error_message,
                     data.client_error_message,
-                    true
+                    false
+                );
+            }
+            else {
+                dispatch({
+                    type: fetchAvailableColorsInProductCategorySuccess(product_category_name),
+                    payload: {colors: data.data.colors}
+                });
+            }
+        });
+};
+
+export const getAvailableBrandsForProductsByCategory = (product_category_name) => dispatch => {
+    dispatch(fetchAvailableBrandsForProductsByCategoryBegin(product_category_name));
+    shop.getAvailableBrandsForProductInCategory(product_category_name,
+        data => {
+            if (data.client_error_message) {
+                const errorDispatchType = types.AVAILABLE_BRANDS_IN + product_category_name;
+                throwError(
+                    dispatch,
+                    errorDispatchType,
+                    data.client_error_message,
+                    data.client_error_message,
+                    false
                 );
             } else {
-                dispatch(getAvailableColorsForProductInCategory(product_category_name, {colors: data.data.colors}));
+                dispatch({
+                    type: fetchAvailableBrandsInProductCategorySuccess(product_category_name),
+                    payload: {brands: data.data.brands}
+                });
             }
         });
 };
@@ -144,7 +169,7 @@ export const getAllProducts = (pageNumber, pageSize,) => dispatch => {
     dispatch(fetchAllProductsBegin());
     shop.getAllProductsPaginated(pageNumber, pageSize, data => {
         if (data.client_error_message) {
-            throwError(dispatch, FAILED_TO_FETCH_ERROR, data.client_error_message, data.response.data,false);
+            throwError(dispatch, FAILED_TO_FETCH_ERROR, data.client_error_message, data.response.data, false);
         } else {
             //order is very important, product category been created must match the order in the api
             dispatch(setPaginationFor(FASHION_PRODUCT, {data: data.data.fashion}));
@@ -158,7 +183,7 @@ export const getAllProducts = (pageNumber, pageSize,) => dispatch => {
         }
 
     })
-}
+};
 
 
 export const searchAllProducts = (searchTerm) => dispatch => {

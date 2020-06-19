@@ -25,7 +25,10 @@ export const catcher = (response)=> {
     let clientInfo=null;
     if(status >=200 && status <= 300){
         return response;
-    }else if(status >=400 && status <500){
+    }else if(status === 304){
+        return response;
+    }
+    else if(status >=400 && status <500){
         if(status === 403){
             clientInfo = "Unauthorized Access : Login to continue";
             return {client_error_message:clientInfo,response};

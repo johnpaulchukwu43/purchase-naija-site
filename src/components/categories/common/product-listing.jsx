@@ -2,12 +2,19 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import { addToWishlist, addToCompare} from '../../../actions'
 import {addToCartWithoutSpecifyingQuantity} from '../../../actions/cartActions'
-import {getAvailableColorsForProductsByCategory, getProductsByCategory} from '../../../actions/productActions'
+import {
+    getAvailableBrandsForProductsByCategory,
+    getAvailableColorsForProductsByCategory,
+    getProductsByCategory
+} from '../../../actions/productActions'
 import ProductListItem from "./product-item";
 import PropTypes from "prop-types";
 import Pagination from "react-js-pagination";
-import {getAvailableColorsInSpecifiedCategory, getProductsInSpecifiedCategory} from "../../../services";
-import {API_SERVER_UNREACHABLE} from "../../../constants/ActionTypes";
+import {
+    getProductCategoryInfo,
+    getProductsInSpecifiedCategory
+} from "../../../services";
+import {API_SERVER_UNREACHABLE, NO_PRODUCTS_FOUND} from "../../../constants/ActionTypes";
 
 
 class ProductListing extends Component {
@@ -26,19 +33,35 @@ class ProductListing extends Component {
 
     componentDidMount(){
         this.fetchProducts();
-        this.fetchAvailableColorsForProductsByCategory();
+        let {all_categories, categoryName} = this.props;
+        let productCategoryInfo = getProductCategoryInfo(categoryName,all_categories);
+        if(productCategoryInfo !== null){
+            this.fetchAvailableColorsForProductsByCategory(productCategoryInfo);
+            this.fetchAvailableBrandsForProductsByCategory(productCategoryInfo);
+        }
     }
 
     fetchProducts = () => {
         this.props.getProductsByCategory(this.state.categoryName,this.state.page_num, this.state.page_size);
     };
 
-    fetchAvailableColorsForProductsByCategory = () =>{
-        let {all_categories,categoryName} = this.props;
+    fetchAvailableColorsForProductsByCategory = (productCategoryInfo) =>{
+        let {categoryName} = this.props;
         //check if the available colors for product category have been fetched already, if it hasn't send dispatch to do fetching.
-        let {colors,error_message} = getAvailableColorsInSpecifiedCategory(categoryName,all_categories);
-        if(colors.length === 0 && error_message !=null){
+        let colors = productCategoryInfo.available_colors.data;
+        let error_message = productCategoryInfo.available_colors.error_message;
+        if(colors.length === 0 && error_message === null){
             this.props.getAvailableColorsForProductsByCategory(categoryName);
+        }
+    };
+
+    fetchAvailableBrandsForProductsByCategory = (productCategoryInfo) =>{
+        let {categoryName} = this.props;
+        //check if the available brands for product category have been fetched already, if it hasn't send dispatch to do fetching.
+        let brands = productCategoryInfo.available_brands.data;
+        let error_message = productCategoryInfo.available_brands.error_message;
+        if(brands.length === 0 && error_message === null){
+            this.props.getAvailableBrandsForProductsByCategory(categoryName);
         }
     };
 
@@ -48,10 +71,10 @@ class ProductListing extends Component {
 
     render() {
         const centerStuff =
-         {
-          display:'inline-block',
-             textAlign:"center",
-         };
+            {
+                display:'inline-block',
+                textAlign:"center",
+            };
 
         let {
             addToCart,
@@ -64,18 +87,12 @@ class ProductListing extends Component {
 
         //hacky stuff, trying to make product-listing generic, to show product list for different categories
         let {products,extractedInfo,product_length} = getProductsInSpecifiedCategory(categoryName,all_categories);
-
-
-
         let {
             error_message,
             page_size,
             current_page
         } = extractedInfo;
-
-
         let content;
-
         /*
             posssible failures
             1) 5**,4**, status codes from server , typically would have erro messages
@@ -94,14 +111,14 @@ class ProductListing extends Component {
                 </div>
             </div>
         }
-        else if(extractedInfo.data.length <= 0){
+        else if(product_length <= 0){
             content= <div className="row">
                 <div className="col-sm-12 text-center section-b-space mt-5 no-found">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/empty-search.jpg`}
                          alt="emptysearch"
                          className="img-fluid mb-4"/>
                     <h3>Sorry! Couldn't Fetch {categoryName}!!! </h3>
-                    <p>{API_SERVER_UNREACHABLE}</p>
+                    <p>{NO_PRODUCTS_FOUND}</p>
                     <button className="btn btn-solid" onClick={this.fetchProducts}>Try Again</button>
                 </div>
             </div>
@@ -128,13 +145,13 @@ class ProductListing extends Component {
                 </div>
             </div>
         }else{
-           content =
-               <div className={centerStuff}>
-                   <div className="alert custom-alert-warning" role="alert">
-                       <i className="fa fa-5x fa-database"></i>
-                   </div>
-                   <h3>No Products Match Search Result! </h3>
-                   <p>Try Searching again with different parameters</p>
+            content =
+                <div className={centerStuff}>
+                    <div className="alert custom-alert-warning" role="alert">
+                        <i className="fa fa-5x fa-database"></i>
+                    </div>
+                    <h3>No Products Match Search Result! </h3>
+                    <p>Try Searching again with different parameters</p>
                 </div>
         }
 
@@ -160,7 +177,8 @@ const mapStateToProps = (state) => ({
 
 ProductListing.propTypes = {
     getProductsByCategory: PropTypes.func.isRequired,
-    getAvailableColorsForProductsByCategory: PropTypes.func.isRequired
+    getAvailableColorsForProductsByCategory: PropTypes.func.isRequired,
+    getAvailableBrandsForProductsByCategory: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -169,6 +187,7 @@ export default connect(
         addToWishlist,
         addToCompare,
         getProductsByCategory,
-        getAvailableColorsForProductsByCategory
+        getAvailableColorsForProductsByCategory,
+        getAvailableBrandsForProductsByCategory
     }
 )(ProductListing)

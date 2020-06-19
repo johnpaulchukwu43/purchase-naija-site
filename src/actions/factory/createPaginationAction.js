@@ -1,8 +1,8 @@
-import * as types from "../../constants/ActionTypes";
+import {fetchProductByCategorySuccess} from "../../constants/ActionTypes";
 
-const setPaginationFor = (prefix,response) => {
+const setPaginationFor = (product_category,response) => {
         return {
-            type: prefix + types.SET_CATEGORY_TYPE,
+            type: fetchProductByCategorySuccess(product_category),
             payload: response
         };
 };

@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
-import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 import { SlideToggle } from 'react-slide-toggle';
 
 
-import {getAvailableColorsInSpecifiedCategory, getBrands, getColors, getMinMaxPrice} from '../../../services';
+import {
+    getProductBrandsInSpecifiedCategory,
+    getProductColorsInSpecifiedCategory
+} from '../../../services';
 import {filterBrand, filterColor, filterPrice} from '../../../actions'
 import {filterProductsResult} from "../../../actions/productActions";
 import {
-    BEAUTY_PRODUCT,
+    BEAUTY_PRODUCT, BRAND,
     COLOR, COMPUTER_PRODUCT,
     ELECTRONICS_PRODUCT,
     FASHION_PRODUCT, MANUFACTURING_PRODUCT, PHONE_PRODUCT,
@@ -31,7 +33,9 @@ class FilterBar extends Component {
             showPriceFilter:true,
             categoryName:props.categoryName,
             all_categories:props.all_categories,
-            colors:[]
+            colors:[],
+            brands:[],
+            filteredBrands:[]
         };
 
     }
@@ -42,9 +46,12 @@ class FilterBar extends Component {
 
     componentDidMount(){
         const {all_categories,categoryName} = this.state;
-        let {colors} = getAvailableColorsInSpecifiedCategory(categoryName,all_categories);
+        let {colors} = getProductColorsInSpecifiedCategory(categoryName,all_categories);
+        let {brands} = getProductBrandsInSpecifiedCategory(categoryName,all_categories);
+        console.log("colors in filter"+JSON.stringify(colors));
         this.setState({
-            colors:colors
+            colors:colors,
+            brands:brands
         });
     }
 
@@ -52,19 +59,19 @@ class FilterBar extends Component {
         document.querySelector(".collection-filter").style = "left: -365px";
     };
 
-    clickBrandHendle(event, brands) {
+    clickBrandHandle(event, brands) {
         this.closeFilter();
-        var index = brands.indexOf(event.target.value);
-        if (event.target.checked)
+        const index = brands.indexOf(event.target.value);
+        if (index === -1 && event.target.checked)
             brands.push(event.target.value); // push in array checked value
-        else
+        else if(index !== -1){
             brands.splice(index, 1); // removed in array unchecked value
-
-        this.props.filterBrand(brands);
+        }
+        this.props.filterProductsResult(this.state.categoryName,BRAND,{brands});
     }
 
     colorHandle(event, color){
-        var elems = document.querySelectorAll(".color-selector ul li");
+        const elems = document.querySelectorAll(".color-selector ul li");
         [].forEach.call(elems, function(el) {
             el.classList.remove("active");
         });
@@ -145,11 +152,12 @@ class FilterBar extends Component {
                     showPriceFilter:true,
                 });
                 break;
+            default:
+                break;
         }
-    }
+    };
     render (){
-        const filteredBrands = this.props.filters.brand;
-        const {showColorFilter,showBrandFilter,showPriceFilter,colors} = this.state;
+        const {showColorFilter,showBrandFilter,showPriceFilter,colors,brands,filteredBrands} = this.state;
         return (
                 <div className="collection-filter-block">
                     <div className="collection-mobile-back">
@@ -165,10 +173,15 @@ class FilterBar extends Component {
                                 <h3 className="collapse-block-title" onClick={onToggle}>brand</h3>
                                 <div className="collection-collapse-block-content"  ref={setCollapsibleElement}>
                                     <div className="collection-brand-filter">
-                                        {this.props.brands.map((brand, index) => {
+                                        {brands.map((brand, index) => {
                                             return (
                                                 <div className="custom-control custom-checkbox collection-filter-checkbox" key={index}>
-                                                    <input type="checkbox" onClick={(e) => this.clickBrandHendle(e,filteredBrands)} value={brand} defaultChecked={filteredBrands.includes(brand)? true : false}  className="custom-control-input" id={brand} />
+                                                    <input type="checkbox"
+                                                           onClick={(e) => this.clickBrandHandle(e,filteredBrands)}
+                                                           value={brand}
+                                                           // defaultChecked={filteredBrands.includes(brand)? true : false}
+                                                           className="custom-control-input"
+                                                           id={brand} />
                                                     <label className="custom-control-label"
                                                            htmlFor={brand}>{brand}</label>
                                                 </div> )
@@ -244,13 +257,10 @@ class FilterBar extends Component {
 
 
 const mapStateToProps = state => ({
-    brands: getBrands(state.data.products),
-    colors: getColors(state.data.products),
-    prices: getMinMaxPrice(state.data.products),
     filters: state.filters,
     all_categories:state.categories,
     priceFilters:state.filter_temp.priceRangeReducer
-})
+});
 
 export default connect(
     mapStateToProps,

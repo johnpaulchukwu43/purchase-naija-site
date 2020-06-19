@@ -182,14 +182,15 @@ export const getProductsInSpecifiedCategory = (specified_category,all_categories
     return {products,extractedInfo,product_length};
 };
 
-export const getAvailableColorsInSpecifiedCategory = (specified_category,all_categories)=>{
+export const getProductColorsInSpecifiedCategory = (specified_category, all_categories)=>{
+    /*  Method traverses through objects stored in redux store
+        to get available colors for a product category .i.e. fashion.
+      */
     const allData = Object.entries(all_categories);
     let colors = [];
     let error_message = null;
     for (const [category,values] of allData){
         if(category === specified_category){
-            console.log("found match");
-            console.log("values:"+JSON.stringify(values.available_colors));
             colors = [...values.available_colors.data];
             error_message = values.available_colors.error_message;
         }
@@ -197,14 +198,41 @@ export const getAvailableColorsInSpecifiedCategory = (specified_category,all_cat
     return {colors,error_message};
 };
 
+export const getProductBrandsInSpecifiedCategory = (specified_category , all_categories)=>{
+    /*  Method traverses through objects stored in redux store
+    to get available brands for a product category .i.e. fashion.
+  */
+    const allData = Object.entries(all_categories);
+    let brands = [];
+    let error_message = null;
+    for (const [category,values] of allData){
+        if(category === specified_category){
+            brands = [...values.available_brands.data];
+            error_message = values.available_brands.error_message;
+        }
+    }
+    return {brands,error_message};
+};
+
+export const getProductCategoryInfo = (specified_category,all_categories)=>{
+    let productCategoryInfo = null;
+    const allData = Object.entries(all_categories);
+    for (const [category,values] of allData){
+        if(category === specified_category){
+            productCategoryInfo =  values;
+        }
+    }
+    return productCategoryInfo;
+};
+
 export const determineRouteForSingleProductView = (categoryName)=>{
     switch(categoryName){
         case FASHION_PRODUCT:
             return FASHION_SINGLE_PRODUCT_ROUTE;
         case RAW_MATERIALS_PRODUCT:
-           return RAW_MATERIAL_SINGLE_PRODUCT_ROUTE;
+            return RAW_MATERIAL_SINGLE_PRODUCT_ROUTE;
         case ELECTRONICS_PRODUCT:
-           return ELECTRONICS_SINGLE_PRODUCT_ROUTE;
+            return ELECTRONICS_SINGLE_PRODUCT_ROUTE;
         case PHONE_PRODUCT:
             return PHONE_SINGLE_PRODUCT_ROUTE;
         case MANUFACTURING_PRODUCT:

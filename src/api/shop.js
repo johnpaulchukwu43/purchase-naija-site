@@ -17,7 +17,7 @@ import {
     ELECTRONICS_PRODUCT_ENDPOINT,
     FASHION_PRODUCTS_ENDPOINT,
     GET_ALL_PRODUCTS_ENDPOINT,
-    getCartEndpoint,
+    getCartEndpoint, getEndpointForAvailableBrandsForGivenProductType,
     getEndpointForAvailableColorsForGivenProductType, getEndpointForProductCategory,
     MANUFACTURING_PRODUCT_ENDPOINT,
     PHONE_PRODUCT_ENDPOINT,
@@ -122,6 +122,17 @@ const getAvailableColorsForProductInCategory = (product_category, cb =() =>{}) =
         return cb({client_error_message:`Unable to fetch available colors for ${product_category}`});
     }
     axiosInstance.get(endpointForAvailableColorsForGivenProductType)
+        .then((response)=>{
+            cb(catcher(response));
+        });
+};
+
+const getAvailableBrandsForProductInCategory = (product_category, cb =() =>{}) =>{
+    let endpointForAvailableBrandsForGivenProductType = getEndpointForAvailableBrandsForGivenProductType(product_category);
+    if(endpointForAvailableBrandsForGivenProductType === null){
+        return cb({client_error_message:`Unable to fetch available brands for ${product_category}`});
+    }
+    axiosInstance.get(endpointForAvailableBrandsForGivenProductType)
         .then((response)=>{
             cb(catcher(response));
         });
@@ -279,5 +290,6 @@ export default {
     searchAllProducts,
     getAllProductsPaginated,
     getAvailableColorsForProductInCategory,
+    getAvailableBrandsForProductInCategory,
     buyProducts: (payload, cb, timeout) => setTimeout(() => cb(), timeout || TIMEOUT)
 }
